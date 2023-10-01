@@ -1,2 +1,2 @@
 # YBS-Directory
-A guide on the Yangon Bus Service with a crowdsourcing approach to the latest information.
+A guide on the Yangon Bus Service with a crowdsourced approach to the information.
