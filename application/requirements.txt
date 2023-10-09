@@ -1,0 +1,4 @@
+fastapi
+coloredlogs
+aiofiles
+slowapi
