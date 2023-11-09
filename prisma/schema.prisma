@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model BusLine {
+  busLineId Int    @id @default(autoincrement())
+  lineTag   String @unique
+
+  startPointId Int
+  endPointId   Int
+
+  startPoint    BusStop         @relation("StartPoint", fields: [startPointId], references: [stopId])
+  endPoint      BusStop         @relation("EndPoint", fields: [endPointId], references: [stopId])
+  RoutedBusStop RoutedBusStop[]
+
+  @@unique([startPointId, endPointId])
+}
+
+model BusStop {
+  stopId        Int             @id @default(autoincrement())
+  stopName      String          @unique
+  address       String
+  longitude     Float
+  latitude      Float
+  RoutesStart   BusLine[]       @relation("StartPoint")
+  RoutesEnd     BusLine[]       @relation("EndPoint")
+  RoutedBusStop RoutedBusStop[]
+}
+
+model RoutedBusStop {
+  routedBusStopId Int     @id @default(autoincrement())
+  stopId          Int
+  busLineId       Int
+  stopOrder       Int
+  stop            BusStop @relation(fields: [stopId], references: [stopId])
+  busLine         BusLine @relation(fields: [busLineId], references: [busLineId])
+
+  @@unique([stopId, busLineId, stopOrder])
+}
