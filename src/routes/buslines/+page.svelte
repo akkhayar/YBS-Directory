@@ -18,7 +18,7 @@
             <div>{data.busStops[bus.startPointId].stopName}</div>
             <div>⇔</div>
             <div>{data.busStops[bus.endPointId].stopName}</div>
-            <div><a href="/bus-lines/{bus.lineTag}">See More</a></div>
+            <div><a href="/buslines/{bus.lineTag}">See More</a></div>
         {/each}
     </div>
 </div>
