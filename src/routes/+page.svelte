@@ -2,7 +2,6 @@
 <!-- 2x3 table -->
 <table>
   <tr>
-    <td><a href="/bus-lines">Bus Lines</a></td>
-    <td><a href="/bus-stops">Stops</a></td>
+    <td><a href="/buslines">Bus Lines</a></td>
   </tr>
 </table>
