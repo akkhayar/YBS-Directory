@@ -11,21 +11,32 @@ datasource db {
 }
 
 model BusLine {
-  busLineId Int    @id @default(autoincrement())
-  lineTag   String @unique
+  id        Int    @id @default(autoincrement())
+  busLineId String @unique
 
   startPointId Int
   endPointId   Int
 
-  startPoint    BusStop         @relation("StartPoint", fields: [startPointId], references: [stopId])
-  endPoint      BusStop         @relation("EndPoint", fields: [endPointId], references: [stopId])
+  startPoint    BusStop         @relation("StartPoint", fields: [startPointId], references: [id])
+  endPoint      BusStop         @relation("EndPoint", fields: [endPointId], references: [id])
   RoutedBusStop RoutedBusStop[]
+  BusLineMerit  BusLineMerit[]
 
   @@unique([startPointId, endPointId])
 }
 
+model BusLineMerit {
+  id        Int     @id @default(autoincrement())
+  busLineId String
+  merit     String
+  amount    Int
+  busLine   BusLine @relation(fields: [busLineId], references: [busLineId])
+
+  @@unique([busLineId, merit])
+}
+
 model BusStop {
-  stopId        Int             @id @default(autoincrement())
+  id            Int             @id @default(autoincrement())
   stopName      String          @unique
   address       String
   longitude     Float
@@ -36,12 +47,12 @@ model BusStop {
 }
 
 model RoutedBusStop {
-  routedBusStopId Int     @id @default(autoincrement())
-  stopId          Int
-  busLineId       Int
-  stopOrder       Int
-  stop            BusStop @relation(fields: [stopId], references: [stopId])
-  busLine         BusLine @relation(fields: [busLineId], references: [busLineId])
+  id        Int     @id @default(autoincrement())
+  stopId    Int
+  busLineId String
+  stopOrder Int
+  stop      BusStop @relation(fields: [stopId], references: [id])
+  busLine   BusLine @relation(fields: [busLineId], references: [busLineId])
 
   @@unique([stopId, busLineId, stopOrder])
 }
