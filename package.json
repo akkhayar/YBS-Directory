@@ -10,6 +10,7 @@
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
   },
   "devDependencies": {
+    "@capacitor/cli": "^5.5.1",
     "@sveltejs/adapter-auto": "^2.0.0",
     "@sveltejs/kit": "^1.20.4",
     "@types/geojson": "^7946.0.13",
@@ -29,7 +30,6 @@
   },
   "type": "module",
   "dependencies": {
-    "@capacitor/cli": "^5.5.1",
     "@capacitor/core": "^5.5.1",
     "@capacitor/geolocation": "^5.0.6",
     "@prisma/client": "^5.5.2",

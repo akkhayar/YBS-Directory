@@ -9,13 +9,12 @@
     import L from "leaflet";
     import "leaflet-routing-machine";
     import "leaflet/dist/leaflet.css";
+    import { Geolocation } from '@capacitor/geolocation';
 
     export let bounds: L.LatLngBoundsExpression | undefined = undefined;
     export let view: L.LatLngExpression | undefined = undefined;
     export let zoom: number | undefined = undefined;
     export let latLngRouteArray: L.LatLng[] | undefined = undefined;
-
-    // require("leaflet-routing-machine");
 
     const dispatch = createEventDispatcher();
 
@@ -51,6 +50,11 @@
                 serviceUrl: "http://router.project-osrm.org/route/v1/",
             }),
         }).addTo(map);
+
+        // user location
+        Geolocation.getCurrentPosition().then((position) => {
+            L.marker([position.coords.latitude, position.coords.longitude]).addTo(map!);
+        });
     });
 
     onDestroy(() => {
