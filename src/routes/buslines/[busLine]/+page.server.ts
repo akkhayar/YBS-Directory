@@ -3,7 +3,7 @@ import prisma from '$lib/prisma';
 export const load = (async (event) => {
     const busLine = await prisma.busLine.findFirst({
         where: {
-            lineTag: event.params.busLine
+            busLineId: event.params.busLine
         },
     });
 

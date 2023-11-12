@@ -14,11 +14,11 @@
         <div class="font-bold">Link</div>
 
         {#each data.busLines as bus}
-            <div>{bus.lineTag}</div>
+            <div>{bus.busLineId}</div>
             <div>{data.busStops[bus.startPointId].stopName}</div>
             <div>⇔</div>
             <div>{data.busStops[bus.endPointId].stopName}</div>
-            <div><a href="/buslines/{bus.lineTag}">See More</a></div>
+            <div><a href="/buslines/{bus.busLineId}">See More</a></div>
         {/each}
     </div>
 </div>

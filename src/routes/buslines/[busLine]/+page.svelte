@@ -21,8 +21,8 @@
     ];
 </script>
 
-<div class={data.busLine.lineTag}>
-    <h1>Bus Line: {data.busLine.lineTag}</h1>
+<div class={data.busLine.busLineId}>
+    <h1>Bus Line: {data.busLine.busLineId}</h1>
     <div class="grid place-items-center grid-cols-2 gap-1">
         <div class="grid place-items-center grid-cols-2 gap-1">
             <div class="font-bold">Order</div>

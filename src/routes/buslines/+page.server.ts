@@ -5,7 +5,7 @@ export const load = (async () => {
     const busLines = await prisma.busLine.findMany();
     const busStopsArr = await prisma.busStop.findMany({
         where: {
-            stopId: {
+            id: {
                 in: busLines.flatMap((busLine) => [busLine.startPointId, busLine.endPointId])
             }
         }
@@ -14,7 +14,7 @@ export const load = (async () => {
     const busStops: { [key: string]: BusStop } = {};
     
     busStopsArr.reduce((acc, busStop) => {
-        acc[busStop.stopId] = busStop;
+        acc[busStop.id] = busStop;
         return acc;
     }, busStops);
     return {
