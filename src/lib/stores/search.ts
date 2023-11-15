@@ -1,7 +1,8 @@
 import { writable } from "svelte/store";
+import type { BusStop } from '@prisma/client';
 
 
-export function createSearchStore(data: any) {
+export function createSearchStore(data: BusStop[]) {
     const { subscribe, set, update } = writable({
         data,
         filtered: data,
