@@ -6,14 +6,11 @@
         createEventDispatcher,
         tick,
     } from "svelte";
+
     import L from "leaflet";
     import "leaflet-routing-machine";
     import "leaflet/dist/leaflet.css";
-    import { Geolocation } from '@capacitor/geolocation';
-
-    export let bounds: L.LatLngBoundsExpression | undefined = undefined;
-    export let view: L.LatLngExpression | undefined = undefined;
-    export let zoom: number | undefined = undefined;
+    import { Geolocation } from "@capacitor/geolocation";
     export let latLngRouteArray: L.LatLng[] | undefined = undefined;
 
     const dispatch = createEventDispatcher();
@@ -22,11 +19,12 @@
     let mapElement: HTMLElement;
 
     onMount(() => {
-        if (!bounds && (!view || !zoom)) {
-            throw new Error("Must set either bounds, or view and zoom.");
-        }
+        const yangon = L.latLngBounds(
+            L.latLng(17.090266, 95.967204),
+            L.latLng(16.587593, 96.368538)
+        );
 
-        map = L.map(mapElement, { maxBounds: bounds })
+        map = L.map(mapElement, { maxBounds: yangon })
             // example to expose map events to parent components:
             .on("zoom", (e) => dispatch("zoom", e))
             .on("popupopen", async (e) => {
@@ -53,8 +51,13 @@
 
         // user location
         Geolocation.getCurrentPosition().then((position) => {
-            L.marker([position.coords.latitude, position.coords.longitude]).addTo(map!);
+            L.marker([
+                position.coords.latitude,
+                position.coords.longitude,
+            ]).addTo(map!);
         });
+
+        map.fitBounds(yangon);
     });
 
     onDestroy(() => {
@@ -65,15 +68,6 @@
     setContext("map", {
         getMap: () => map,
     });
-
-    $: if (map) {
-        if (bounds) {
-            map.fitBounds(bounds);
-            map.setMinZoom(map.getBoundsZoom(map.options.maxBounds!));
-        } else if (view && zoom) {
-            map.setView(view, zoom);
-        }
-    }
 </script>
 
 <div class="w-full h-full" bind:this={mapElement}>
