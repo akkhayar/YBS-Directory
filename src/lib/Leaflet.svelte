@@ -11,6 +11,7 @@
     import "leaflet-routing-machine";
     import "leaflet/dist/leaflet.css";
     import { Geolocation } from "@capacitor/geolocation";
+
     export let latLngRouteArray: L.LatLng[] | undefined = undefined;
 
     const dispatch = createEventDispatcher();
@@ -41,13 +42,15 @@
             }
         ).addTo(map);
 
-        L.Routing.control({
-            waypoints: latLngRouteArray,
-            show: false,
-            router: L.Routing.osrmv1({
-                serviceUrl: "http://router.project-osrm.org/route/v1/",
-            }),
-        }).addTo(map);
+        if (latLngRouteArray) {
+            L.Routing.control({
+                waypoints: latLngRouteArray,
+                show: false,
+                router: L.Routing.osrmv1({
+                    serviceUrl: "http://router.project-osrm.org/route/v1/",
+                }),
+            }).addTo(map);
+        }
 
         // user location
         Geolocation.getCurrentPosition().then((position) => {
