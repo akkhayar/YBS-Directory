@@ -1,20 +1,29 @@
 <script lang="ts">
-    import Leaflet from "$lib/Leaflet.svelte";
+    import { onMount } from "svelte";
     import type { PageData } from "./$types";
-
-    import L from "leaflet";
     export let data: PageData;
 
-    const routeArray = [
-        L.latLng(
-            data.routedBusStops[0].stop.latitude,
-            data.routedBusStops[0].stop.longitude
-        ),
-        L.latLng(
-            data.routedBusStops[data.routedBusStops.length - 1].stop.latitude,
-            data.routedBusStops[data.routedBusStops.length - 1].stop.longitude
-        ),
-    ];
+    let Leaflet: any;
+    let routeArray: any;
+
+    onMount(async () => {
+        // dynamically import the CSR component and lib
+        const L = (await import("leaflet")).default;
+        Leaflet = (await import("$lib/Leaflet.svelte")).default;
+
+        routeArray = [
+            L.latLng(
+                data.routedBusStops[0].stop.latitude,
+                data.routedBusStops[0].stop.longitude
+            ),
+            L.latLng(
+                data.routedBusStops[data.routedBusStops.length - 1].stop
+                    .latitude,
+                data.routedBusStops[data.routedBusStops.length - 1].stop
+                    .longitude
+            ),
+        ];
+    });
 </script>
 
 <div class={data.busLine.busLineId}>
@@ -29,8 +38,8 @@
                 <div>{routedStop.stop.stopName}</div>
             {/each}
         </div>
-        <Leaflet
-            latLngRouteArray={routeArray}
-        />
+        {#if Leaflet}
+            <svelte:component this={Leaflet} latLngRouteArray={routeArray} />
+        {/if}
     </div>
 </div>
