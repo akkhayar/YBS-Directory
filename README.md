@@ -17,14 +17,14 @@ npm run dev
 
 ### Setup Database
 
-Development database တစ်ခုဆောက်ဖိုအတွက် အောက်ပါ command ကို terminal ထဲကူးထည့်ပါ။
+Dev database တစ်ခုဆောက်ရန် အောက်ပါ command အား terminal ထဲသို့ကူးထည့်ပါ။
 ```bash
 npx prisma migrate dev --name initialize
 
 node ./scripts/setupDatabase.js
 ```
 
-`Bus Data Seeded` ဆိုတဲ့ ထွက်စာပေါ်လာရင် ရပါပြီ။ 
+`Bus Data Seeded` ဆိုတဲ့ စာပေါ်လာရင် ရပါပြီ။ 
 
 ## Licenses
 
