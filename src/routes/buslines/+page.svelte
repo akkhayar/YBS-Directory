@@ -1,24 +1,17 @@
 <script lang="ts">
     import type { PageData } from "./$types";
+    import BottomSlide from "$lib/components/BottomSlide.svelte";
+    import BackButton from "$lib/components/BackButton.svelte";
+    import BusCard from "./BusCard.svelte";
 
     export let data: PageData;
 </script>
 
-<div class="bus-lines">
-    <h1>Bus Lines</h1>
-    <div class="grid place-items-center grid-cols-5 gap-2">
-        <div class="font-bold">Bus Line</div>
-        <div class="font-bold">Starting Stop</div>
-        <div>⇔</div>
-        <div class="font-bold">Ending Stop</div>
-        <div class="font-bold">Link</div>
-
+<div class="bus-lines flex justify-between flex-col h-screen">
+    <BackButton />
+    <BottomSlide>
         {#each data.busLines as bus}
-            <div>{bus.busLineId}</div>
-            <div>{data.busStops[bus.startPointId].stopName}</div>
-            <div>⇔</div>
-            <div>{data.busStops[bus.endPointId].stopName}</div>
-            <div><a href="/buslines/{bus.busLineId}">See More</a></div>
+            <BusCard busLine={bus} busStops={data.busStops} />
         {/each}
-    </div>
+    </BottomSlide>
 </div>

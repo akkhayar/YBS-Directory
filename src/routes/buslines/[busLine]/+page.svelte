@@ -9,7 +9,7 @@
     onMount(async () => {
         // dynamically import the CSR component and lib
         const L = (await import("leaflet")).default;
-        Leaflet = (await import("$lib/Leaflet.svelte")).default;
+        Leaflet = (await import("$lib/components/Leaflet.svelte")).default;
 
         routeArray = [
             L.latLng(

@@ -1,7 +1,9 @@
-<h1>YBS Directory</h1>
-<a href="/buslines">
-    <button> Bus Lines </button>
-</a>
-<a href="/search">
-    <button> Search </button>
-</a>
+<script lang="ts">
+  import BottomNavBar from "$lib/components/BottomNavBar.svelte";
+  import NavBar from "./NavBar.svelte";
+</script>
+
+<div class="flex flex-col justify-between">
+  <NavBar />
+  <BottomNavBar />
+</div>

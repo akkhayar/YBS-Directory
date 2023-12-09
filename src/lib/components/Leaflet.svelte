@@ -33,14 +33,12 @@
                 e.popup.update();
             });
 
-        L.tileLayer(
-            "https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png",
-            {
-                attribution:
-                    '<a href="https://github.com/cyclosm/cyclosm-cartocss-style/releases" title="CyclOSM - Open Bicycle render">CyclOSM</a> | Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-                maxZoom: 18,
-            }
-        ).addTo(map);
+        L.tileLayer("https://tile.openstreetmap.de/{z}/{x}/{y}.png", {
+            attribution:
+                '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            maxZoom: 18,
+            minZoom: 11,
+        }).addTo(map);
 
         if (latLngRouteArray) {
             L.Routing.control({
@@ -73,8 +71,8 @@
     });
 </script>
 
-<div class="w-full h-full" bind:this={mapElement}>
-    {#if map}
+<div class="w-full h-full absolute -z-10" bind:this={mapElement}>
+    {#if map} 
         <slot />
     {/if}
 </div>
