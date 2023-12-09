@@ -4,7 +4,9 @@
     import type { PageData } from "./$types";
     import type { BusStop } from "@prisma/client";
     import { writable, type Writable } from "svelte/store";
-    import Leaflet from "$lib/Leaflet.svelte";
+    import RouteCard from "./RouteCard.svelte";
+    import BottomNavBar from "$lib/components/BottomNavBar.svelte";
+    import BottomSlide from "$lib/components/BottomSlide.svelte";
 
     export let data: PageData;
 
@@ -52,7 +54,6 @@
 
     function setBusStop(busStop: BusStop) {
         const setter = () => {
-            console.log(lastWrittenStop);
             lastWrittenStop.set(busStop.stopName);
             // switch last written stop to the other one
             // so that the user is able to set bus stops quickly
@@ -72,40 +73,84 @@
     onDestroy(() => {
         unsubscribe();
     });
+
+    const routeInfo = {
+        fromLoc: {
+            lng: 0.22,
+            lat: 0.22,
+            stopId: "1",
+        },
+        toLoc: {
+            lng: 0.22,
+            lat: 0.22,
+            stopId: null,
+        },
+        routeSegments: [
+            {
+                order: 1,
+                type: "walk",
+                distance: 1000,
+                from: [21, 21],
+                to: [31, 21],
+            },
+            {
+                order: 1,
+                type: "transit",
+                distance: 1000,
+                from: {
+                    busLineId: "3",
+                    stopId: "2",
+                },
+                to: {
+                    busLineId: "4",
+                    stopId: "23",
+                },
+            },
+            {
+                order: 2,
+                type: "transit",
+                distance: 1000,
+                from: {
+                    busLineId: "YANGON-AIRPORT-BUS",
+                    stopId: "23",
+                },
+                to: {
+                    busLineId: "YANGON-AIRPORT-BUS",
+                    stopId: "51",
+                },
+            },
+        ],
+    };
 </script>
 
-<div class="search container">
-    <h1>Search Route</h1>
-    <input type="search" placeholder="Source" bind:value={$busStopA} />
-    <input type="search" placeholder="Destination" bind:value={$busStopB} />
-    <button disabled={($busStopA && $busStopB) === ''}>Search</button>
-    <button on:click={switchBusStops} disabled={($busStopA && $busStopB) === ''}>Switch</button>
+<div class="flex justify-between flex-col h-screen">
+    <div class="search-bar grid grid-cols-1">
+        <div
+            class="m-3 py-2 px-5 rounded-3xl border custom-box-shadow flex bg-white"
+        >
+            <input
+                class="flex flex-auto w-90 outline-none"
+                type="search"
+                placeholder="Source"
+                bind:value={$busStopA}
+            />
+            <button
+                on:click={switchBusStops}
+                disabled={($busStopA && $busStopB) === ""}>Switch</button
+            >
+        </div>
 
-    <div class="mt-5 grid grid-cols-2">
-        <div><strong>Name</strong></div>
-        <div><strong>Address</strong></div>
-        {#each $searchStore.filtered as busStop}
-            <div>{busStop.stopName}</div>
-            <div><button on:click={setBusStop(busStop)}>Select</button></div>
-        {/each}
+        <input
+            class="m-3 py-2 px-5 rounded-3xl border outline-none custom-box-shadow"
+            type="search"
+            placeholder="Destination"
+            bind:value={$busStopB}
+        />
     </div>
-    <Leaflet />
+    <button disabled={($busStopA && $busStopB) === ""}>Search</button>
+
+    <BottomSlide>
+        <RouteCard {routeInfo} />
+        <BottomNavBar />
+    </BottomSlide>
 </div>
-
-<style>
-    .search {
-        margin-bottom: 1rem;
-    }
-
-    .search.container {
-        width: 500px;
-        margin: auto;
-    }
-
-    .search input {
-        width: 100%;
-        padding: 0.5rem;
-        border: 1px solid #ccc;
-        border-radius: 0.25rem;
-    }
-</style>
