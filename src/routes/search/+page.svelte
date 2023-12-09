@@ -74,20 +74,29 @@
     });
 </script>
 
-<div class="search container">
-    <h1>Search Route</h1>
-    <input type="search" placeholder="Source" bind:value={$busStopA} />
-    <input type="search" placeholder="Destination" bind:value={$busStopB} />
-    <button disabled={($busStopA && $busStopB) === ''}>Search</button>
-    <button on:click={switchBusStops} disabled={($busStopA && $busStopB) === ''}>Switch</button>
+<div class="flex justify-between flex-col h-screen">
+    <div class="search-bar grid grid-cols-1">
+        <div
+            class="m-3 py-2 px-5 rounded-3xl border custom-box-shadow flex bg-white"
+        >
+            <input
+                class="flex flex-auto w-90 outline-none my-lang"
+                type="search"
+                placeholder="Source"
+                bind:value={$busStopA}
+            />
+            <button
+                on:click={switchBusStops}
+                disabled={($busStopA && $busStopB) === ""}>Switch</button
+            >
+        </div>
 
-    <div class="mt-5 grid grid-cols-2">
-        <div><strong>Name</strong></div>
-        <div><strong>Address</strong></div>
-        {#each $searchStore.filtered as busStop}
-            <div>{busStop.stopName}</div>
-            <div><button on:click={setBusStop(busStop)}>Select</button></div>
-        {/each}
+        <input
+            class="m-3 py-2 px-5 rounded-3xl border outline-none custom-box-shadow my-lang"
+            type="search"
+            placeholder="Destination"
+            bind:value={$busStopB}
+        />
     </div>
     <Leaflet />
 </div>

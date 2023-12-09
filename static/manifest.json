@@ -1,0 +1,9 @@
+{
+    "name": "YBS Directory",
+    "short_name": "ybs-directory",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#f2efe9",
+    "theme_color": "#cca727",
+    "description": "Yangon Bus System Guide and Directory."
+}
