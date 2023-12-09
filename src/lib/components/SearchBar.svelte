@@ -4,7 +4,7 @@
     </div>
     <div>
         <!-- to D/L -->
-        <a href="#">
+        <a href="/">
             <input type="text" placeholder="Search here">
         </a>
     </div>
@@ -16,5 +16,4 @@
         background-color: #fff;
         border-width: solid 1px;
     }
-
 </style>
