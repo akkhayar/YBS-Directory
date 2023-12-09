@@ -1,11 +1,9 @@
 <script lang="ts">
-  import SearchBar from "$lib/components/SearchBar.svelte";
+  import BottomNavBar from "$lib/components/BottomNavBar.svelte";
+  import NavBar from "./NavBar.svelte";
 </script>
-<h1>YBS Directory</h1>
-<a href="/buslines">
-    <button> Bus Lines </button>
-</a>
-<a href="/search">
-    <button> Search </button>
-</a>
-<SearchBar></SearchBar>
+
+<div class="flex flex-col justify-between">
+  <NavBar />
+  <BottomNavBar />
+</div>
