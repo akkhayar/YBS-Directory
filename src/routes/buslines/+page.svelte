@@ -7,7 +7,7 @@
     export let data: PageData;
 </script>
 
-<div class="bus-lines flex justify-between flex-col h-screen">
+<div class="flex flex-col justify-between h-screen">
     <BackButton />
     <BottomSlide>
         {#each data.busLines as bus}

@@ -1,9 +1,9 @@
 <script lang="ts">
   import BottomNavBar from "$lib/components/BottomNavBar.svelte";
-  import NavBar from "./NavBar.svelte";
+  import NavBar from "$lib/components/NavBar.svelte";
 </script>
 
-<div class="flex flex-col justify-between">
+<div>
   <NavBar />
   <BottomNavBar />
 </div>
