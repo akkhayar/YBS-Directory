@@ -32,6 +32,6 @@
     "dotenv": "^16.3.1",
     "leaflet": "^1.9.4",
     "leaflet-routing-machine": "^3.2.12",
-    "mongodb": "^6.3.0"
+    "leaflet.offline": "^3.0.1"
   }
 }
