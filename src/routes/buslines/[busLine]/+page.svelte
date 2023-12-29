@@ -1,11 +1,14 @@
 <script lang="ts">
     import type { PageData } from "./$types";
-    import { route } from '$lib/stores/route';
+    import { route } from "$lib/stores/route";
     import BottomSlide from "$lib/components/BottomSlide.svelte";
 
     export let data: PageData;
-    const routeArray = data.routedBusStops.map(busStops => [busStops.latitude, busStops.longitude]);
-    
+    const routeArray = data.routedBusStops.map((busStops) => [
+        busStops.latitude,
+        busStops.longitude,
+    ]);
+
     route.set(routeArray);
 </script>
 

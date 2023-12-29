@@ -1,74 +1,63 @@
-import { PrismaClient } from "@prisma/client";
-import { readFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 
-const prisma = new PrismaClient();
+const FILES = {
+    busLines: "src/lib/data/busLines.json",
+    busStops: "src/lib/data/busStops.json",
+};
 
-async function main() {
-  // We create a new user
-  const buses = JSON.parse((readFileSync("./scripts/bus_data.json", "utf-8")));
-  for (const bus of buses) {
-    if (!bus.manually_checked) {
-      continue;
+function main() {
+    // We create a new user
+    const srcBusesLines = JSON.parse(
+        readFileSync("./scripts/ocr/bus_data.json", "utf-8"),
+    );
+    const srcBusStops = JSON.parse(
+        readFileSync("./scripts/osm/processed_bus_stops.json", "utf-8"),
+    );
+    let busLines = {};
+    let busStops = { index: {}, busStops: {} };
+
+    for (const bus of srcBusesLines) {
+        if (!bus.manually_checked || !bus.full_coverage) {
+            continue;
+        }
+
+        busLines[bus.line_number] = {
+            id: bus.bus_id,
+            busLineId: bus.line_number,
+            stops: bus.stops,
+            firstStopId: bus.stops[0],
+            lastStopId: bus.stops[bus.stops.length - 1],
+        };
+
+        for (const busStop of bus.stops) {
+            Object.assign(
+                busStops["busStops"],
+                srcBusStops
+                    .filter((stop) => (stop.rename || stop.name) === busStop)
+                    .map((stop) => {
+                        if (
+                            !Object.keys(busStops["index"]).includes(stop.name)
+                        ) {
+                            busStops["index"][stop.rename || stop.name] =
+                                stop.id.toString();
+                        }
+
+                        return {
+                            id: stop.id,
+                            latitude: stop.latitude,
+                            longitude: stop.longitude,
+                            name: stop.rename || stop.name,
+                            address: stop.address,
+                        };
+                    })
+                    .reduce((map, obj) => ((map[obj.id] = obj), map), {}),
+            );
+        }
     }
 
-    for (let i = 0; i < bus.stops.length; i++) {
-      const stop = bus.stops[i];
-      if (await prisma.busStop.findFirst({ where: { stopName: stop } })) {
-        continue;
-      }
-      await prisma.busStop.create({
-        data: {
-          stopName: stop,
-          latitude: Math.floor(Math.random() * 17) + 16,
-          longitude: Math.floor(Math.random() * 98) + 95,
-          address: stop,
-        },
-      });
-    }
-
-    // find start and end points as stops
-    const startPoint = await prisma.busStop.findFirst({
-      where: {
-        stopName: bus.stops[0],
-      },
-    });
-
-    const endPoint = await prisma.busStop.findFirst({
-      where: {
-        stopName: bus.stops[bus.stops.length - 1],
-      },
-    });
-
-    const busLine = await prisma.busLine.create({
-      data: {
-        id: bus.id,
-        busLineId: bus.line_number,
-        endPointId: endPoint.id,
-        startPointId: startPoint.id,
-      },
-    });
-
-    // add routed stops
-    for (let i = 0; i < bus.stops.length; i++) {
-      const stop = bus.stops[i];
-
-      const stopRow = await prisma.busStop.findFirst({ where: { stopName: stop } });
-      await prisma.routedBusStop.create({
-        data: {
-          stopId: stopRow.id,
-          busLineId: busLine.busLineId,
-          stopOrder: i,
-        },
-      });
-    }
-  };
-  console.log("Bus data seeded.");
+    console.log("Bus data seeded.");
+    writeFileSync(FILES.busLines, JSON.stringify(busLines));
+    writeFileSync(FILES.busStops, JSON.stringify(busStops));
 }
 
-main()
-  .catch((e) => {
-    throw e;
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+main();
