@@ -1,7 +1,6 @@
 import { writable } from "svelte/store";
 import type { BusStop } from "$lib/db";
 
-
 type SearchStore = {
     data: BusStop[];
     filtered: BusStop[];
@@ -12,13 +11,13 @@ export function createSearchStore(data: BusStop[]) {
     const { subscribe, set, update } = writable({
         data,
         filtered: data,
-        search: ''
+        search: "",
     });
 
     return {
         subscribe,
         set,
-        update
+        update,
     };
 }
 

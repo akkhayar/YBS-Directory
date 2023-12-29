@@ -1,9 +1,9 @@
 <script lang="ts">
-    import { onMount, onDestroy, setContext } from 'svelte';
-    import L from 'leaflet';
-    import 'leaflet-routing-machine';
-    import 'leaflet/dist/leaflet.css';
-    import type { BusStop } from '$lib/db';
+    import { onMount, onDestroy, setContext } from "svelte";
+    import L from "leaflet";
+    import "leaflet-routing-machine";
+    import "leaflet/dist/leaflet.css";
+    import type { BusStop } from "$lib/db";
 
     export let latLngRouteArray: number[][] | undefined = undefined;
     export let busStops: BusStop[];
@@ -11,7 +11,10 @@
     let map: L.Map | undefined;
     let mapElement: HTMLElement;
 
-    const yangon = L.latLngBounds(L.latLng(17.090266, 95.967204), L.latLng(16.587593, 96.368538));
+    const yangon = L.latLngBounds(
+        L.latLng(17.090266, 95.967204),
+        L.latLng(16.587593, 96.368538),
+    );
 
     function findBounds(latLngArray: number[][]) {
         let southWest = L.latLng(latLngArray[0][0], latLngArray[0][1]);
@@ -35,24 +38,32 @@
             center: [16.8409, 96.1735],
         });
 
-        const tileLayer = L.tileLayer('https://tile.openstreetmap.de/{z}/{x}/{y}.png', {
-            attribution:
-                '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-            maxZoom: 18,
-            minZoom: 11,
-        }).addTo(map);
+        const tileLayer = L.tileLayer(
+            "https://tile.openstreetmap.de/{z}/{x}/{y}.png",
+            {
+                attribution:
+                    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                maxZoom: 18,
+                minZoom: 11,
+            },
+        ).addTo(map);
 
-        tileLayer.addEventListener('load', () => {
+        tileLayer.addEventListener("load", () => {
             L.layerGroup(
                 busStops.map((busStop) => {
-                    const marker = L.marker([busStop.latitude, busStop.longitude], {
-                        title: busStop.name,
-                        icon: L.icon({
-                            iconUrl: '/bus-stop.svg',
-                            iconSize: [16, 16],
-                        }),
-                    });
-                    marker.bindPopup(`<button class="hover:bg-black">Go Here</button>`);
+                    const marker = L.marker(
+                        [busStop.latitude, busStop.longitude],
+                        {
+                            title: busStop.name,
+                            icon: L.icon({
+                                iconUrl: "/bus-stop.svg",
+                                iconSize: [16, 16],
+                            }),
+                        },
+                    );
+                    marker.bindPopup(
+                        `<button class="hover:bg-black">Go Here</button>`,
+                    );
                     return marker;
                 }),
             ); //.addTo(map!);
@@ -63,26 +74,34 @@
             const addWayPoints = false;
 
             const plan = L.Routing.plan(
-                latLngRouteArray.map((latLng) => L.latLng(latLng[0], latLng[1])),
+                latLngRouteArray.map((latLng) =>
+                    L.latLng(latLng[0], latLng[1]),
+                ),
                 {
                     draggableWaypoints: draggable,
                     addWaypoints: addWayPoints,
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                    createMarker: (_: number, waypoint: L.Routing.Waypoint, __: number) =>
+                    createMarker: (
+                        _: number,
+                        waypoint: L.Routing.Waypoint,
+                        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                        __: number,
+                    ) =>
                         L.marker(waypoint.latLng, {
                             draggable: draggable,
                             icon: L.icon({
-                                iconUrl: '/bus-stop.svg',
+                                iconUrl: "/bus-stop.svg",
                                 iconSize: [16, 16],
                             }),
-                        }).bindPopup(`<button class="hover:bg-black">Go Here</button>`),
+                        }).bindPopup(
+                            `<button class="hover:bg-black">Go Here</button>`,
+                        ),
                 },
             );
 
             L.Routing.control({
                 plan: plan,
                 router: L.Routing.osrmv1({
-                    serviceUrl: 'http://router.project-osrm.org/route/v1/',
+                    serviceUrl: "http://router.project-osrm.org/route/v1/",
                 }),
                 show: false,
                 lineOptions: {
@@ -91,7 +110,7 @@
                     addWaypoints: addWayPoints,
                     styles: [
                         {
-                            color: '#0d1016',
+                            color: "#0d1016",
                             opacity: 1,
                             weight: 4,
                         },
@@ -109,12 +128,12 @@
         map = undefined;
     });
 
-    setContext('map', {
+    setContext("map", {
         getMap: () => map,
     });
 </script>
 
-<div class="w-full h-full absolute -z-10" bind:this="{mapElement}">
+<div class="w-full h-full absolute -z-10" bind:this={mapElement}>
     {#if map}
         <slot />
         <!-- <BusStopPopup /> -->

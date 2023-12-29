@@ -10,7 +10,9 @@
         style="border-color: var(--color-primary);"
     >
         <img class="w-5 m-auto sm:mx-0 sm:w-4" src={icon} alt="search-icon" />
-        <p class="me-1 text-center text-xs leading-normal hidden my-auto sm:block">
+        <p
+            class="me-1 text-center text-xs leading-normal hidden my-auto sm:block"
+        >
             {label}
         </p>
     </button>

@@ -1,4 +1,7 @@
-<div aria-label="Navigation Bar" class="px-6 py-5 pb-1 absolute top-0 flex w-full sm:w-fit">
+<div
+    aria-label="Navigation Bar"
+    class="px-6 py-5 pb-1 absolute top-0 flex w-full sm:w-fit"
+>
     <a
         aria-label="More Options"
         href="/settings"

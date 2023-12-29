@@ -1,7 +1,7 @@
 import { BUSLINES } from "$lib/db";
 
-export const load = (() => {
+export const load = () => {
     return {
-        busLines: Object.values(BUSLINES)
+        busLines: Object.values(BUSLINES),
     };
-});
+};

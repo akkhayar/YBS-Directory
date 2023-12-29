@@ -2,9 +2,13 @@
     import { BUSSTOPS, BUSLINES } from "$lib/db";
     export let busStopName: string | undefined;
 
-    const busStopData = Object.values(BUSSTOPS.busStops).find((busStop) => busStop.name === busStopName);
+    const busStopData = Object.values(BUSSTOPS.busStops).find(
+        (busStop) => busStop.name === busStopName,
+    );
 
-    const busLineData = Object.values(BUSLINES).filter((busLine) => busLine.stops.includes(busStopData!.name));
+    const busLineData = Object.values(BUSLINES).filter((busLine) =>
+        busLine.stops.includes(busStopData!.name),
+    );
 </script>
 
 <div class="w-10 h-10 bg-white z-10">
