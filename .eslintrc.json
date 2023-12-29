@@ -5,9 +5,12 @@
     },
     "extends": "standard-with-typescript",
     "parserOptions": {
+        "project": "./.svelte-kit/tsconfig.json",
         "ecmaVersion": "latest",
-        "sourceType": "module"
+        "sourceType": "module",
+        "extraFileExtensions": [
+            ".svelte"
+        ]
     },
-    "rules": {
-    }
+    "rules": {}
 }
