@@ -1,11 +1,10 @@
 <script lang="ts">
+    import type { PageData } from "./$types";
+    import type { BusStop } from "$lib/db";
     import { createSearchStore, searchHandler } from "$lib/stores/search";
     import { onDestroy } from "svelte";
-    import type { PageData } from "./$types";
-    import type { BusStop } from "@prisma/client";
-    import { writable, type Writable } from "svelte/store";
+    import { writable } from "svelte/store";
     import RouteCard from "./RouteCard.svelte";
-    import BottomNavBar from "$lib/components/BottomNavBar.svelte";
     import BusStopCard from "./BusStopCard.svelte";
     import BottomSlide from "$lib/components/BottomSlide.svelte";
 
@@ -24,24 +23,17 @@
     // set bus stop a as last written by default
     let lastWrittenStop = busStopA;
 
-    function getSearchUpdater(busStopWritable: Writable<string>) {
-        const updater = (value: string) => {
-            searchStore.update((model) => {
-                return {
-                    ...model,
-                    search: value,
-                };
-            });
-        };
-        return updater;
-    }
+    const updater = (value: string) => {
+        searchStore.update((model) => {
+            return {
+                ...model,
+                search: value,
+            };
+        });
+    };
 
-    function setActiveStore(store: Writable<string>) {
-        lastWrittenStop = store;
-    }
-
-    busStopA.subscribe(getSearchUpdater(busStopA));
-    busStopB.subscribe(getSearchUpdater(busStopB));
+    busStopA.subscribe(updater);
+    busStopB.subscribe(updater);
 
     busStopB.subscribe((value) => {
         // update searchstore.search
@@ -55,8 +47,7 @@
 
     function getBusStopSetter(busStop: BusStop) {
         const setter = () => {
-            console.log(lastWrittenStop);
-            lastWrittenStop.set(busStop.stopName);
+            lastWrittenStop.set(busStop.name);
             searchStore.update((model) => {
                 return {
                     ...model,
@@ -81,8 +72,10 @@
         unsubscribe();
     });
 
+    let isSearched = writable(false);
+
     function searchBus() {
-        $busStopA;
+        isSearched.set(!$isSearched);
     }
 
     const routeInfo = {
@@ -145,7 +138,7 @@
                 type="search"
                 placeholder="Source"
                 bind:value={$busStopA}
-                on:click={() => lastWrittenStop = busStopA}
+                on:click={() => (lastWrittenStop = busStopA)}
             />
             <button
                 on:click={switchBusStops}
@@ -158,19 +151,21 @@
             type="search"
             placeholder="Destination"
             bind:value={$busStopB}
-            on:click={() => lastWrittenStop = busStopB}
-            />
+            on:click={() => (lastWrittenStop = busStopB)}
+        />
     </div>
     <button on:click={searchBus} disabled={($busStopA && $busStopB) === ""}
         >Search</button
     >
 
     <BottomSlide>
-        <!-- <RouteCard {routeInfo} />
-        <BottomNavBar /> -->
-        {#each $searchStore.filtered as busStop}
-            <BusStopCard {busStop} onClick={getBusStopSetter(busStop)} />
-        {/each}
+        {#if $isSearched}
+            <RouteCard {routeInfo} />
+        {:else}
+            {#each $searchStore.filtered as busStop}
+                <BusStopCard {busStop} onClick={getBusStopSetter(busStop)} />
+            {/each}
+        {/if}
     </BottomSlide>
 </div>
 

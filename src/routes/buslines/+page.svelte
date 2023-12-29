@@ -1,8 +1,8 @@
 <script lang="ts">
-    import type { PageData } from "./$types";
     import BottomSlide from "$lib/components/BottomSlide.svelte";
     import BackButton from "$lib/components/BackButton.svelte";
     import BusCard from "./BusCard.svelte";
+    import type { PageData } from "./$types";
 
     export let data: PageData;
 </script>
@@ -11,7 +11,7 @@
     <BackButton />
     <BottomSlide>
         {#each data.busLines as bus}
-            <BusCard busLine={bus} busStops={data.busStops} />
+            <BusCard busLine={bus} />
         {/each}
     </BottomSlide>
 </div>

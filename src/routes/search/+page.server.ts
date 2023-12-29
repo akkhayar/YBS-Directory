@@ -1,8 +1,7 @@
-import prisma from '$lib/prisma';
+import { BUSSTOPS } from '$lib/db';
 
-export const load = (async () => {
-    const busStops = await prisma.busStop.findMany();
+export const load = () => {
     return {
-        busStops
+        busStops: Object.values(BUSSTOPS.index).map((id) => (BUSSTOPS.busStops[id]))
     };
-});
+};

@@ -1,4 +1,4 @@
-<div>
+<div aria-label="Bottom Slide">
     <div
         class="pt-2 px-6 w-screen h-4/5 overflow-y-auto"
         id="results"
@@ -6,7 +6,7 @@
     >
         <img
             class="w-8 mx-auto"
-            src="round-drag-handle.svg"
+            src="/round-drag-handle.svg"
             alt="round-drag-handle"
         />
         <slot />

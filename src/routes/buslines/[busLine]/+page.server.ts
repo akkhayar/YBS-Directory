@@ -1,22 +1,17 @@
-import prisma from '$lib/prisma';
+import { BUSLINES, BUSSTOPS } from "$lib/db";
+import { error } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types';
 
-export const load = (async (event) => {
-    const busLine = await prisma.busLine.findFirst({
-        where: {
-            busLineId: event.params.busLine
-        },
-    });
+export const load: PageServerLoad = ({ params }) => {
+    const busLine = BUSLINES[params.busLine];
+    if (busLine === undefined) {
+        error(404, {
+			message: `Not found '${params.busLine}'`
+		});
+    }
 
-    const routedBusStops = await prisma.routedBusStop.findMany({
-        where: {
-            busLineId: busLine?.busLineId
-        },
-        include: {
-            stop: true
-        },
-    });
     return {
-        busLine: busLine!,
-        routedBusStops
+        busLine,
+        routedBusStops: busLine.stops.map((stopName) => BUSSTOPS.busStops[BUSSTOPS.index[stopName]])
     };
-});
+};

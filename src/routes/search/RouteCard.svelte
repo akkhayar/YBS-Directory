@@ -5,13 +5,18 @@
         stopId: string | null;
     }
 
+    interface BuslineSegment {
+        busLineId: string;
+        stopId: string;
+    }
+
     interface TransitSegment {
         order: number;
-        type: string | "walk" | "transit";
+        type: string; // "walk" | "transit";
         distance: number;
         duration: number;
-        from: number[] | { busLineId: string; stopId: string };
-        to: number[] | { busLineId: string; stopId: string };
+        from: number[] | BuslineSegment;
+        to: number[] | BuslineSegment;
     }
 
     interface Journey {
@@ -121,9 +126,11 @@
                         <div>
                             <div class="flex">
                                 <img src="walking.svg" alt="walk-img" />
-                                <div class="ps-2 text-xs">{formatDistance(segment.distance)}</div>
+                                <div class="ps-2 text-xs">
+                                    {formatDistance(segment.distance)}
+                                </div>
                             </div>
-                                <div class="font-light text-xs text-gray-800">
+                            <div class="font-light text-xs text-gray-800">
                                 {segment.duration} mins
                             </div>
                         </div>
@@ -148,7 +155,7 @@
                 {routeInfo.fromLoc.stopId} - {routeInfo.toLoc.stopId}
             </div>
         </div>
-        <a class="w-20 underline text-lg text-slate-300">
+        <a class="w-20 underline text-lg text-slate-300" href="./">
             <!-- <img src="angle-right.svg" alt="angle-right"> -->
             View
         </a>

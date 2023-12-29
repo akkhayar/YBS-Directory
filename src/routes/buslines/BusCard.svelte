@@ -1,10 +1,7 @@
 <script lang="ts">
-    import type { BusLine, BusStop } from "@prisma/client";
+    import type { BusLine } from "$lib/db";
 
     export let busLine: BusLine;
-    export let busStops: {
-        [key: string]: BusStop;
-    };
 </script>
 
 <a class="flex my-10" href="/buslines/{busLine.busLineId}">
@@ -19,8 +16,6 @@
         class="my-lang col-span-2 text-white text-xs"
         style="font-family: 'Noto Sans Myanmar', serif;"
     >
-        {busStops[busLine.startPointId].stopName} ⇔ {busStops[
-            busLine.endPointId
-        ].stopName}
+        {busLine.firstStopId} ⇔ {busLine.lastStopId}
     </div>
 </a>
