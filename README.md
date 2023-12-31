@@ -1,4 +1,13 @@
-# YBS Directory
+<p align="center">
+  <h3 align="center">YBS Directory</h3>
+  
+  <p align="center">
+    Yangon Bus Service (YBS) guide mobile application  <br />
+  <a href="https://workesque.akkhayar.com"><strong>Learn more »</strong></a>
+  </p>
+</p>
+
+#### Built With
 
 [Sveltekit](https://kit.svelte.dev/) · [Capicator](https://capacitorjs.com/) · [prisma.io](https://www.prisma.io/)
 
