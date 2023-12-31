@@ -3,7 +3,7 @@
   
   <p align="center">
     Yangon Bus Service (YBS) guide mobile application  <br />
-  <a href="https://docs.akkhayar.com/"><strong>Learn more »</strong></a>
+  <a href="https://ybs-directory.akkhayar.com/"><strong>Try Now »</strong></a>
   </p>
 </p>
 
