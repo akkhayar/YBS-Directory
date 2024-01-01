@@ -5,7 +5,7 @@
     import "leaflet/dist/leaflet.css";
     import type { BusStop } from "$lib/db";
 
-    export let latLngRouteArray: number[][] | undefined = undefined;
+    export let latLngRouteArray: number[][];
     export let busStops: BusStop[];
 
     let map: L.Map | undefined;
@@ -69,7 +69,7 @@
             ); //.addTo(map!);
         });
 
-        if (latLngRouteArray) {
+        if (latLngRouteArray && latLngRouteArray.length > 0) {
             const draggable = false;
             const addWayPoints = false;
 
