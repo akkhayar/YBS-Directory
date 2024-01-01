@@ -7,9 +7,7 @@
   </p>
 </p>
 
-#### Built With
-
-[Sveltekit](https://kit.svelte.dev/) · [Capicator](https://capacitorjs.com/) · [prisma.io](https://www.prisma.io/)
+#### Built With [Sveltekit](https://kit.svelte.dev/)
 
 ## Development
 
