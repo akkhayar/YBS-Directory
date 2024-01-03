@@ -7,6 +7,7 @@
     import RouteCard from "./RouteCard.svelte";
     import BusStopCard from "./BusStopCard.svelte";
     import BottomSlide from "$lib/components/BottomSlide.svelte";
+    import BottomSlideScrollable from "$lib/components/BottomSlideScrollable.svelte";
 
     export let data: PageData;
 
@@ -130,13 +131,14 @@
     };
 </script>
 
-<div class="flex justify-between flex-col h-screen">
-    <div class="px-6 py-5 search-bar grid grid-cols-1">
-        <div class="py-1 px-4 mb-4 rounded-3xl border shadow flex bg-white">
+<div class="flex h-screen flex-col justify-between">
+    <div class="search-bar grid grid-cols-1 px-6 py-5">
+        <div
+            class="mb-3 flex h-10 flex-grow justify-between rounded-full border border-solid bg-white px-5 shadow sm:w-80 sm:flex-none"
+            style="border-color: var(--color-primary);"
+        >
             <input
-                class="flex flex-auto w-90 outline-none my-lang"
                 type="search"
-                placeholder="Source"
                 bind:value={$busStopA}
                 on:click={() => (lastWrittenStop = busStopA)}
             />
@@ -147,9 +149,9 @@
         </div>
 
         <input
-            class="py-1 px-4 rounded-3xl border outline-none shadow my-lang"
+            class="flex h-10 flex-grow justify-between rounded-full border border-solid bg-white px-5 shadow sm:w-80 sm:flex-none"
+            style="border-color: var(--color-primary);"
             type="search"
-            placeholder="Destination"
             bind:value={$busStopB}
             on:click={() => (lastWrittenStop = busStopB)}
         />
@@ -159,13 +161,19 @@
     >
 
     <BottomSlide>
-        {#if $isSearched}
-            <RouteCard {routeInfo} />
-        {:else}
-            {#each $searchStore.filtered as busStop}
-                <BusStopCard {busStop} onClick={getBusStopSetter(busStop)} />
-            {/each}
-        {/if}
+        <p>Locations Found</p>
+        <BottomSlideScrollable>
+            {#if $isSearched}
+                <RouteCard {routeInfo} />
+            {:else}
+                {#each $searchStore.filtered as busStop}
+                    <BusStopCard
+                        {busStop}
+                        onClick={getBusStopSetter(busStop)}
+                    />
+                {/each}
+            {/if}
+        </BottomSlideScrollable>
     </BottomSlide>
 </div>
 
