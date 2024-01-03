@@ -14,5 +14,5 @@
             {label}
         </span>
     </button>
-    <p class="text-center text-xs mt-1 leading-normal sm:hidden">{label}</p>
+    <p class="text-center text-xs mt-1 leading-normal Poppins sm:hidden">{label}</p>
 </a>
