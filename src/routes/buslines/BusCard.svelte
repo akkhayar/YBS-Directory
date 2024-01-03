@@ -4,16 +4,35 @@
     export let busLine: BusLine;
 </script>
 
-<a class="flex my-10" href="/buslines/{busLine.busLineId}">
-    <div class="bg-blue-600 w-10 h-10 me-5 flex justify-center items-center">
-        <p class="m-auto text-2xl text-white">
-            {busLine.busLineId}
-        </p>
-    </div>
+<a class="flex justify-start mb-7" href="/buslines/{busLine.busLineId}">
     <div
-        class="my-lang col-span-2 text-white text-xs"
-        style="font-family: 'Noto Sans Myanmar', serif;"
+        class="bg-bus-blue w-14 h-14 me-5 flex rounded-lg items-center justify-center"
     >
-        {busLine.firstStopId} ⇔ {busLine.lastStopId}
+        <span class="text-2xl text-white Arial">
+            {busLine.busLineId}
+        </span>
+    </div>
+    <div class="flex flex-col justify-center">
+        <div
+            class="my-lang text-white text-xs flex justify-start items-center w-full mb-2"
+            style="font-family: 'Noto Sans Myanmar', serif;"
+        >
+            <span>
+                {busLine.firstStopId}
+            </span>
+            <img
+                src="/bi-directional-arrow.svg"
+                alt="bi-directional-arrow"
+                class="w-4 mx-3"
+            />
+            <span>
+                {busLine.lastStopId}
+            </span>
+        </div>
+        <div
+            class="my-lang text-white text-xs text-dim"
+        >
+            {busLine.stops.length} total stops
+        </div>
     </div>
 </a>
