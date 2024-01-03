@@ -125,7 +125,7 @@
                     {#if segment.type === "walk"}
                         <div>
                             <div class="flex">
-                                <img src="walking.svg" alt="walk-img" />
+                                <img src="/walking.svg" alt="walk-img" />
                                 <div class="ps-2 text-xs">
                                     {formatDistance(segment.distance)}
                                 </div>
@@ -136,7 +136,7 @@
                         </div>
                     {:else}
                         <div class="flex">
-                            <img src="bus.svg" alt="bus-img" />
+                            <img src="/bus.svg" alt="bus-img" />
                             <div class="ps-2 text-base">
                                 {segment.from.busLineId}
                             </div>
@@ -155,9 +155,9 @@
                 {routeInfo.fromLoc.stopId} - {routeInfo.toLoc.stopId}
             </div>
         </div>
+        
         <a class="w-20 underline text-lg text-slate-300" href="./">
-            <!-- <img src="angle-right.svg" alt="angle-right"> -->
-            View
+            <img src="/right-arrow.svg" alt="right-arrow">
         </a>
     </div>
 </div>
