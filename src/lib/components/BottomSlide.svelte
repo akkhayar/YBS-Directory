@@ -1,12 +1,11 @@
 <div
     aria-label="Bottom Slide"
-    class="px-6 w-screen h-4/5 rounded-t-3xl"
+    class="bg-glass bg-glas absolute bottom-0 h-3/6 w-screen rounded-t-3xl px-6"
     id="results"
-    style="background-color: rgba(20,38,34,40%); backdrop-filter: blur(15.6px);"
 >
-    <div class="w-full mt-3.5">
+    <div class="mt-3.5 w-full">
         <img
-            class="w-8 mx-auto"
+            class="mx-auto w-8"
             src="/round-drag-handle.svg"
             alt="round-drag-handle"
         />
