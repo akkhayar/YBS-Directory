@@ -1,3 +1,3 @@
-<div class="overflow-y-auto rounded-lg" style="height: 93%;">
+<div class="overflow-y-auto rounded-lg" style="height: 70%;">
     <slot />
 </div>
