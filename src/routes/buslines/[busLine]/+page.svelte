@@ -14,7 +14,7 @@
     route.set(routeArray);
 </script>
 
-<div class="absolute top-80 flex h-fit">
+<div class="absolute bottom-0 h-2/5 flex">
     <BottomSlide>
         <BottomSlideTitle>
             Stops between: <span class="NotoSansMyanmar"
@@ -33,7 +33,7 @@
                         <div class="font-bold">Bus Stop</div>
                         {#each data.routedBusStops as routedStop}
                             <div>BUSES</div>
-                            <div>-</div>
+                            <div> - </div>
                             <div>{routedStop.name}</div>
                         {/each}
                     </div>
