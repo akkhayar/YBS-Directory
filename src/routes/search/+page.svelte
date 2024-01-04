@@ -6,7 +6,9 @@
     import { writable } from "svelte/store";
     import RouteCard from "./RouteCard.svelte";
     import BusStopCard from "./BusStopCard.svelte";
+    import BusStopSearchBar from "./BusStopSearchBar.svelte";
     import BottomSlide from "$lib/components/BottomSlide.svelte";
+    import BottomSlideTitle from "$lib/components/BottomSlideTitle.svelte";
     import BottomSlideScrollable from "$lib/components/BottomSlideScrollable.svelte";
 
     export let data: PageData;
@@ -133,35 +135,45 @@
 
 <div class="flex h-screen flex-col justify-between">
     <div class="search-bar grid grid-cols-1 px-6 py-5">
-        <div
-            class="mb-3 flex h-10 flex-grow justify-between rounded-full border border-solid bg-white px-5 shadow sm:w-80 sm:flex-none"
-            style="border-color: var(--color-primary);"
+        <BusStopSearchBar
+            onInputClick={() => (lastWrittenStop = busStopA)}
+            placeholder="Source"
+            valueStore={busStopA}
         >
-            <input
-                type="search"
-                bind:value={$busStopA}
-                on:click={() => (lastWrittenStop = busStopA)}
-            />
+            <button
+                on:click={searchBus}
+                disabled={($busStopA && $busStopB) === ""}
+            >
+                <img
+                    src="/location.svg"
+                    alt="location"
+                    class="me-1.5 w-4"
+                    style="filter: invert(86%) sepia(44%) saturate(3801%) hue-rotate(359deg) brightness(102%) contrast(104%);"
+                />
+            </button>
+        </BusStopSearchBar>
+        <BusStopSearchBar
+            onInputClick={() => (lastWrittenStop = busStopB)}
+            placeholder="Destination"
+            valueStore={busStopB}
+        >
             <button
                 on:click={switchBusStops}
-                disabled={($busStopA && $busStopB) === ""}>Switch</button
+                disabled={($busStopA && $busStopB) === ""}
             >
-        </div>
-
-        <input
-            class="flex h-10 flex-grow justify-between rounded-full border border-solid bg-white px-5 shadow sm:w-80 sm:flex-none"
-            style="border-color: var(--color-primary);"
-            type="search"
-            bind:value={$busStopB}
-            on:click={() => (lastWrittenStop = busStopB)}
-        />
+                <img src="/swap.svg" alt="swap" class="w-7" />
+            </button>
+        </BusStopSearchBar>
     </div>
-    <button on:click={searchBus} disabled={($busStopA && $busStopB) === ""}
-        >Search</button
-    >
 
-    <BottomSlide>
-        <p>Locations Found</p>
+    <BottomSlide size={2}>
+        <BottomSlideTitle>
+            {#if $isSearched}
+                Routes Found
+            {:else}
+                Locations Found
+            {/if}
+        </BottomSlideTitle>
         <BottomSlideScrollable>
             {#if $isSearched}
                 <RouteCard {routeInfo} />

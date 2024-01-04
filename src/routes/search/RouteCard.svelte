@@ -107,8 +107,11 @@
     ];
 </script>
 
-<div class="border-b-slate-300 border-b p-4">
-    <div class="grid gap-0 rounded-3xl bg-white" style={totalGridColsStyle}>
+<div class="border-b border-b-slate-300">
+    <div
+        class="grid h-16 gap-0 rounded-3xl bg-white"
+        style={totalGridColsStyle}
+    >
         {#each routeInfo.routeSegments as segment}
             <div
                 class={backdropRounded(segment)}
@@ -119,7 +122,7 @@
             >
                 <div
                     class="rounded-3xl {isFirstSegment(segment) ||
-                        'rounded-l-none'} p-3 flex flex-col justify-center items-center h-full"
+                        'rounded-l-none'} flex h-full flex-col items-center justify-center p-3"
                     style="background-color: {segmentShade(segment)};"
                 >
                     {#if segment.type === "walk"}
@@ -130,18 +133,18 @@
                                     {formatDistance(segment.distance)}
                                 </div>
                             </div>
-                            <div class="font-light text-xs text-gray-800">
+                            <div class="text-xs font-light text-gray-700">
                                 {segment.duration} mins
                             </div>
                         </div>
                     {:else}
                         <div class="flex">
                             <img src="/bus.svg" alt="bus-img" />
-                            <div class="ps-2 text-base">
+                            <div class="Poppins ps-2 text-base">
                                 {segment.from.busLineId}
                             </div>
                         </div>
-                        <div class="font-light text-xs text-gray-800">
+                        <div class="Poppins text-xs font-light text-gray-700">
                             {segment.duration} mins
                         </div>
                     {/if}
@@ -149,15 +152,16 @@
             </div>
         {/each}
     </div>
-    <div class="flex justify-between mt-3">
-        <div class="rounded-3xl bg-slate-300 flex justify-between">
-            <div class="mx-3 w-fit">
-                {routeInfo.fromLoc.stopId} - {routeInfo.toLoc.stopId}
-            </div>
+    <div class="mt-3 flex justify-between">
+        <div
+            class="flex h-7 justify-between rounded-3xl"
+            style="background-color: var(--color-secondary-white)"
+        >
+            <p class="Poppins mx-3 my-2 w-fit text-xs">Malikha - Time City</p>
         </div>
-        
-        <a class="w-20 underline text-lg text-slate-300" href="./">
-            <img src="/right-arrow.svg" alt="right-arrow">
+
+        <a href="/route">
+            <img src="/right-arrow.svg" alt="right-arrow" />
         </a>
     </div>
 </div>
