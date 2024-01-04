@@ -3,4 +3,12 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
     plugins: [sveltekit()],
+    server: {
+        port: 5173,
+        strictPort: true,
+        host: 'localhost',
+        hmr: {
+            clientPort: 5173,
+        }
+    }
 });
