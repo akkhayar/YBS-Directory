@@ -6,17 +6,17 @@
 
     export let data: LayoutData;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let Leaflet: any;
+    let LeafletMap: any;
 
     onMount(async () => {
         // dynamically import the CSR component and lib
-        Leaflet = (await import("$lib/components/Leaflet.svelte")).default;
+        LeafletMap = (await import("$lib/components/LeafletMap.svelte")).default;
     });
 </script>
 
-{#if Leaflet}
+{#if LeafletMap}
     <svelte:component
-        this={Leaflet}
+        this={LeafletMap}
         busStops={data.busStops}
         latLngRouteArray={$route}
     />

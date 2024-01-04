@@ -110,9 +110,10 @@
                     addWaypoints: addWayPoints,
                     styles: [
                         {
-                            color: "#0d1016",
+                            color: "#0d372a",
                             opacity: 1,
                             weight: 4,
+                            stroke: true,
                         },
                     ],
                 },
