@@ -1,34 +1,62 @@
-import busLinesJSON from "$lib/data/busLines.json";
 import busStopsJSON from "$lib/data/busStops.json";
+import busLinesMetadata from "$lib/data/routes/metadata.json";
+import type { BusLineGeoJSON, BusStop } from "$lib/db.d";
+import fs from "fs";
 
-export type BusStop = {
-    id: number;
-    name: string;
-    address?: string;
-    latitude: number;
-    longitude: number;
-};
+const BUSSTOPS: { [busStopID: string]: BusStop } = busStopsJSON;
 
-export type BusStops = {
-    index: {
-        [name: string]: string;
-    };
-    busStops: {
-        [id: string]: BusStop;
-    };
-};
+const busStopValues = Object.values(BUSSTOPS);
 
-export type BusLine = {
-    id: number;
-    busLineId: string;
-    firstStopId: string;
-    lastStopId: string;
-    stops: string[];
-};
+const busLines: { [busLine: string]: BusLineGeoJSON } = {};
+for (const busLine of busLinesMetadata.busLines) {
+    const geojson = fs.readFileSync(
+        `src/lib/data/routes/${busLine}.json`,
+        "utf8",
+    );
 
-export type BusLines = {
-    [busLineId: string]: BusLine;
-};
+    try {
+        busLines[busLine] = JSON.parse(geojson) as BusLineGeoJSON;
+    } catch (e) {
+        console.error(`Error parsing ${busLine}.json`);
+    }
+}
 
-export const BUSLINES: BusLines = busLinesJSON;
-export const BUSSTOPS: BusStops = busStopsJSON;
+export function getAllBusLines() {
+    return busLines;
+}
+
+export function getBusLine(busLine: string) {
+    if (!busLinesMetadata.busLines.includes(busLine)) {
+        return undefined;
+    }
+    // read geojson file 'YBS-${busLine}.geojson'
+    const geojson = fs.readFileSync(
+        `src/lib/data/routes/YBS-${busLine}.json`,
+        "utf8",
+    );
+    return JSON.parse(geojson) as BusLineGeoJSON;
+}
+
+export function getAllBusStops() {
+    return BUSSTOPS;
+}
+
+export function getBusStop(query: {
+    busStopID?: string;
+    busStopName?: string;
+}): BusStop {
+    query.busStopID = query.busStopID?.toUpperCase();
+    if (query.busStopID) {
+        return BUSSTOPS[query.busStopID];
+    } else if (query.busStopName) {
+        const busStop = busStopValues.find(
+            (stop) => stop.name_en === query.busStopName,
+        );
+        if (!busStop) {
+            throw new Error("Bus stop not found");
+        }
+        return busStop;
+    } else {
+        throw new Error("Invalid query");
+    }
+}
