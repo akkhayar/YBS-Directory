@@ -10,20 +10,22 @@ enum CostType {
     Transfers = "transfers",
 }
 
-// Node Class
+// Node class for representing a state in the A* algorithm
 class Node {
     constructor(
         public busStop: BusStop,
         public parent: Node | null = null,
-        public g: number = 0,
-        public h: number = 0,
+        public g: number = 0, // Cost from start to this node
+        public h: number = 0, // Heuristic cost estimate from this node to goal
     ) {}
 
+    // Total cost (f) is the sum of g and h
     get f(): number {
         return this.g + this.h;
     }
 }
 
+// Extended priority queue to include a 'contains' method
 class ExtendedPriorityQueue<T> extends PriorityQueue<T> {
     private elementsSet: Set<string>;
     private elementIdentifier: (element: T) => string;
@@ -37,6 +39,7 @@ class ExtendedPriorityQueue<T> extends PriorityQueue<T> {
         this.elementIdentifier = elementIdentifier;
     }
 
+    // Override enqueue to track elements
     enqueue(element: T): boolean {
         const added = super.enqueue(element);
         if (added) {
@@ -45,6 +48,7 @@ class ExtendedPriorityQueue<T> extends PriorityQueue<T> {
         return added;
     }
 
+    // Override dequeue to keep track of elements
     dequeue(): T | undefined {
         const element = super.dequeue();
         if (element !== undefined) {
@@ -53,36 +57,35 @@ class ExtendedPriorityQueue<T> extends PriorityQueue<T> {
         return element;
     }
 
+    // Check if an element is in the priority queue
     contains(element: T): boolean {
         return this.elementsSet.has(this.elementIdentifier(element));
     }
 }
 
+// Function to calculate the time based on distance
 function calculateTime(distance: number) {
     return distance;
 }
 
+// Define distance costs between stops
 const distanceCosts: DistanceMap = {
     // 'smallerID-largerID': distance,
-    // Populate with actual distances
 };
 
+// Define neighbors for each stop
 const stopNeighbors: { [stopId: number]: BusStop[] } = {
-    // Populate this based on bus lines and walking distance calculations
-    // Example:
-    // 1: [BusStop2, BusStop3], // BusStop1 is directly connected to BusStop2 and BusStop3
-    // 2: [BusStop1, BusStop4],
-    // ...
+    // ... populate based on bus lines and walking distance ...
 };
 
-// TransitPathFinder Class
+// Class for performing A* pathfinding in a transit network
 export class TransitPathFinder {
     closedSet: Set<string>;
     openSet: ExtendedPriorityQueue<Node>;
     distances: DistanceMap;
     goal: BusStop;
     stopNeighbors: { [stopId: string]: BusStop[] };
-    walkingDistanceThreshold: number = 0.5; // Kilometers
+    walkingDistanceThreshold: number = 0.5; // Kilometers for walkable distance
 
     constructor(
         distances: DistanceMap,
@@ -99,6 +102,7 @@ export class TransitPathFinder {
         this.stopNeighbors = stopNeighbors;
     }
 
+    // Heuristic function to estimate the cost from start to goal
     heuristic(start: BusStop): number {
         const startIdNum = parseInt(start.id);
         const goalIdNum = parseInt(this.goal.id);
@@ -109,6 +113,7 @@ export class TransitPathFinder {
         return this.distances[key] || Number.MAX_VALUE;
     }
 
+    // Main method to find the path from start to goal
     findPath(start: BusStop, costType: CostType): BusStop[] {
         this.openSet.enqueue(new Node(start));
 
@@ -129,7 +134,6 @@ export class TransitPathFinder {
                 const gScore =
                     current.g +
                     this.getTravelCost(current.busStop, neighborStop, costType);
-
                 const neighborNode = new Node(
                     neighborStop,
                     current,
@@ -137,6 +141,7 @@ export class TransitPathFinder {
                     this.heuristic(neighborStop),
                 );
 
+                // Add neighbor to open set if not present, or update cost if cheaper path found
                 if (
                     !this.openSet.contains(neighborNode) ||
                     gScore < neighborNode.g
@@ -150,9 +155,11 @@ export class TransitPathFinder {
             }
         }
 
+        // Return an empty array if no path is found
         return [];
     }
 
+    // Construct the path from the goal node to the start node
     constructPath(goalNode: Node): BusStop[] {
         const path: BusStop[] = [];
         let current: Node | null = goalNode;
@@ -163,17 +170,19 @@ export class TransitPathFinder {
         return path;
     }
 
+    // Get neighboring bus stops for a given stop
     getNeighbors(busStop: BusStop): BusStop[] {
         return this.stopNeighbors[busStop.id] || [];
     }
 
+    // Calculate the travel cost between two stops based on the specified cost type
     getTravelCost(start: BusStop, end: BusStop, costType: CostType): number {
         const isWalking =
             this.calculateWalkingDistance(start, end) <=
             this.walkingDistanceThreshold;
 
-        // disable walking
-        if (isWalking && false) {
+        // Check if walking is an option and calculate cost accordingly
+        if (isWalking) {
             switch (costType) {
                 case CostType.Time:
                     return this.calculateWalkingTime(start, end);
@@ -183,6 +192,7 @@ export class TransitPathFinder {
                     return 0;
             }
         } else {
+            // Use pre-defined costs for bus travel
             const startIdNum = parseInt(start.id);
             const endIdNum = parseInt(end.id);
             const key =
@@ -204,11 +214,13 @@ export class TransitPathFinder {
         }
     }
 
+    // Placeholder for calculating walking distance
     calculateWalkingDistance(start: BusStop, end: BusStop): number {
-        // TODO: Implement Haversine formula to calculate the distance
+        // TODO: Implement Haversine formula or similar
         return Number.MAX_VALUE;
     }
 
+    // Placeholder for calculating walking time
     calculateWalkingTime(start: BusStop, end: BusStop): number {
         // TODO: Calculate time based on walking speed and distance
         return Number.MAX_VALUE;
