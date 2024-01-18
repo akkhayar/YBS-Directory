@@ -3,10 +3,10 @@
     import L from "leaflet";
     import "leaflet-routing-machine";
     import "leaflet/dist/leaflet.css";
-    import type { BusStop } from "$lib/db";
+    import type { BusStop } from "$lib/database";
 
     export let latLngRouteArray: number[][];
-    export let busStops: BusStop[];
+    export let busStops: BusStop[] = [];
 
     let map: L.Map | undefined;
     let mapElement: HTMLElement;
@@ -52,9 +52,9 @@
             L.layerGroup(
                 busStops.map((busStop) => {
                     const marker = L.marker(
-                        [busStop.latitude, busStop.longitude],
+                        [busStop.lat, busStop.lng],
                         {
-                            title: busStop.name,
+                            title: busStop.name_en,
                             icon: L.icon({
                                 iconUrl: "/bus-stop.svg",
                                 iconSize: [16, 16],

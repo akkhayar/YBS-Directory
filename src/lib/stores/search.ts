@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-import type { BusStop } from "$lib/db";
+import type { BusStop } from "$lib/database.d";
 
 type SearchStore = {
     data: BusStop[];
@@ -24,6 +24,6 @@ export function createSearchStore(data: BusStop[]) {
 export function searchHandler(store: SearchStore) {
     const searchTerm = store.search.toLowerCase();
     store.filtered = store.data.filter((item) => {
-        return item.name.toLowerCase().includes(searchTerm);
+        return item.name_en.toLowerCase().includes(searchTerm);
     });
 }

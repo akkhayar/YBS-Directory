@@ -1,9 +1,7 @@
-import { BUSSTOPS } from "$lib/db";
+import { getAllBusStops } from "$lib/server/database";
+// import { generateBusStopNetwork } from "$lib/server/preprocessor";
 
 export const load = () => {
-    return {
-        busStops: Object.values(BUSSTOPS.index).map(
-            (id) => BUSSTOPS.busStops[id],
-        ),
-    };
+    // await generateBusStopNetwork(Object.values(getAllBusLines()));
+    return { busStops: Object.values(getAllBusStops()) };
 };

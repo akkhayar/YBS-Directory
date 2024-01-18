@@ -1,15 +1,13 @@
 <script lang="ts">
     import type { PageData } from "./$types";
-    import type { BusStop } from "$lib/db";
+    import type { BusStop, TransitPath } from "$lib/database.d";
     import { createSearchStore, searchHandler } from "$lib/stores/search";
-    import { onDestroy } from "svelte";
-    import { writable } from "svelte/store";
+    import { onDestroy, onMount } from "svelte";
+    import { writable, type Writable } from "svelte/store";
     import RouteCard from "./RouteCard.svelte";
     import BusStopCard from "./BusStopCard.svelte";
     import BusStopSearchBar from "./BusStopSearchBar.svelte";
     import BottomSlide from "$lib/components/BottomSlide.svelte";
-    import BottomSlideTitle from "$lib/components/BottomSlideTitle.svelte";
-    import BottomSlideScrollable from "$lib/components/BottomSlideScrollable.svelte";
 
     export let data: PageData;
 
@@ -19,130 +17,85 @@
         searchHandler(model);
     });
 
-    // writables for the two search boxes
-    let busStopA = writable("");
-    let busStopB = writable("");
+    // Writables for the two search boxes
+    let originBusStop: Writable<BusStop | undefined> = writable(undefined);
+    let destBusStop: Writable<BusStop | undefined> = writable(undefined);
 
-    // set bus stop a as last written by default
-    let lastWrittenStop = busStopA;
+    // Set bus stop a as last written by default
+    let lastWrittenStop = originBusStop;
 
-    const updater = (value: string) => {
+    function updateSearchStore(busStop: BusStop | undefined) {
         searchStore.update((model) => {
             return {
                 ...model,
-                search: value,
+                search: busStop?.name_en || "",
             };
         });
-    };
+    }
 
-    busStopA.subscribe(updater);
-    busStopB.subscribe(updater);
+    originBusStop.subscribe(updateSearchStore);
+    destBusStop.subscribe(updateSearchStore);
 
-    busStopB.subscribe((value) => {
-        // update searchstore.search
-        searchStore.update((model) => {
-            return {
-                ...model,
-                search: value,
-            };
-        });
-    });
-
-    function getBusStopSetter(busStop: BusStop) {
+    // Sets the clicked bus stop card to the selected search bar
+    function busStopSetter(busStop: BusStop) {
         const setter = () => {
-            lastWrittenStop.set(busStop.name);
+            lastWrittenStop.set(busStop);
             searchStore.update((model) => {
                 return {
                     ...model,
                     search: "",
                 };
             });
-            // switch last written stop to the other one
-            // so that the user is able to set bus stops quickly
+            // Swap last written stop for continuous setting
             lastWrittenStop =
-                lastWrittenStop === busStopA ? busStopB : busStopA;
+                lastWrittenStop === originBusStop ? destBusStop : originBusStop;
         };
         return setter;
     }
 
-    function switchBusStops() {
-        const busStopAValue = $busStopA;
-        busStopA.set($busStopB);
-        busStopB.set(busStopAValue);
+    // Swap origin and destination bus stops
+    function swapBusStops() {
+        const busStopAValue = $originBusStop;
+        originBusStop.set($destBusStop);
+        destBusStop.set(busStopAValue);
     }
 
+    let isSearched = writable(false);
+    let searchedRoute: TransitPath;
+
+    async function search() {
+        // Hit the backend transit path router
+        // const response = await fetch(
+        //     `/route?from=${$originBusStop?.id}&to=${$destBusStop?.id}`,
+        // );
+        const response = await fetch(
+            // '/route?from=85&to=319',
+            '/route?from=2011&to=2342'
+        );
+        searchedRoute = await response.json() as TransitPath;
+        searchedRoute.segments.forEach(element => {
+            console.log(`${element.startStop.name_mm} - ${element.busLine?.metadata.route_id} > ${element.endStop.name_mm}`);
+        });
+        isSearched.set(!$isSearched);
+    }
+    // onMount(async () => {
+    //     await search();
+    // });
     onDestroy(() => {
         unsubscribe();
     });
-
-    let isSearched = writable(false);
-
-    function searchBus() {
-        isSearched.set(!$isSearched);
-    }
-
-    const routeInfo = {
-        fromLoc: {
-            lng: 0.22,
-            lat: 0.22,
-            stopId: "1",
-        },
-        toLoc: {
-            lng: 0.22,
-            lat: 0.22,
-            stopId: null,
-        },
-        routeSegments: [
-            {
-                order: 1,
-                type: "walk",
-                distance: 1000,
-                duration: 10,
-                from: [21, 21],
-                to: [31, 21],
-            },
-            {
-                order: 1,
-                type: "transit",
-                distance: 1000,
-                duration: 200,
-                from: {
-                    busLineId: "3",
-                    stopId: "2",
-                },
-                to: {
-                    busLineId: "4",
-                    stopId: "23",
-                },
-            },
-            {
-                order: 2,
-                type: "transit",
-                distance: 1000,
-                duration: 30,
-                from: {
-                    busLineId: "131",
-                    stopId: "23",
-                },
-                to: {
-                    busLineId: "131",
-                    stopId: "51",
-                },
-            },
-        ],
-    };
 </script>
 
 <div class="flex h-screen flex-col justify-between">
     <div class="search-bar grid grid-cols-1 px-6 py-5">
         <BusStopSearchBar
-            onInputClick={() => (lastWrittenStop = busStopA)}
-            placeholder="Source"
-            valueStore={busStopA}
+            onInputClick={() => (lastWrittenStop = originBusStop)}
+            placeholder="Search origin"
+            valueStore={originBusStop}
         >
             <button
-                on:click={searchBus}
-                disabled={($busStopA && $busStopB) === ""}
+                on:click={search}
+                disabled={($originBusStop && $destBusStop) === undefined}
             >
                 <img
                     src="/location.svg"
@@ -153,44 +106,38 @@
             </button>
         </BusStopSearchBar>
         <BusStopSearchBar
-            onInputClick={() => (lastWrittenStop = busStopB)}
-            placeholder="Destination"
-            valueStore={busStopB}
+            onInputClick={() => (lastWrittenStop = destBusStop)}
+            placeholder="Search destination"
+            valueStore={destBusStop}
         >
             <button
-                on:click={switchBusStops}
-                disabled={($busStopA && $busStopB) === ""}
+                on:click={swapBusStops}
+                disabled={($originBusStop && $destBusStop) === undefined}
             >
                 <img src="/swap.svg" alt="swap" class="w-7" />
             </button>
         </BusStopSearchBar>
     </div>
 
-    <BottomSlide size={2}>
-        <BottomSlideTitle>
+    <BottomSlide let:Scrollable let:Title size={2}>
+        <Title>
             {#if $isSearched}
                 Routes Found
             {:else}
                 Locations Found
             {/if}
-        </BottomSlideTitle>
-        <BottomSlideScrollable>
+        </Title>
+        <Scrollable>
             {#if $isSearched}
-                <RouteCard {routeInfo} />
+                <RouteCard journey={searchedRoute} />
             {:else}
                 {#each $searchStore.filtered as busStop}
                     <BusStopCard
                         {busStop}
-                        onClick={getBusStopSetter(busStop)}
+                        onClick={busStopSetter(busStop)}
                     />
                 {/each}
             {/if}
-        </BottomSlideScrollable>
+        </Scrollable>
     </BottomSlide>
 </div>
-
-<style>
-    .shadow {
-        box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
-    }
-</style>

@@ -1,56 +1,30 @@
 <script lang="ts">
-    interface Location {
-        lng: number;
-        lat: number;
-        stopId: string | null;
-    }
-
-    interface BuslineSegment {
-        busLineId: string;
-        stopId: string;
-    }
-
-    interface TransitSegment {
-        order: number;
-        type: string; // "walk" | "transit";
-        distance: number;
-        duration: number;
-        from: number[] | BuslineSegment;
-        to: number[] | BuslineSegment;
-    }
-
-    interface Journey {
-        fromLoc: Location;
-        toLoc: Location;
-        routeSegments: TransitSegment[];
-    }
-    export let routeInfo: Journey;
-
-    const segmentShade = (segment: TransitSegment, offset: number = 0) => {
-        return segmentIndexShade[
-            routeInfo.routeSegments.indexOf(segment) + offset
-        ];
+    import type { TransitPathSegment, TransitPath } from "$lib/database.d";
+    export let journey: TransitPath;
+    
+    const segmentShade = (segment: TransitPathSegment, offset: number = 0) => {
+        return segmentIndexShade[journey.segments.indexOf(segment) + offset];
     };
 
-    const segmentIndex = (segment: TransitSegment) => {
-        return routeInfo.routeSegments.indexOf(segment);
+    const segmentIndex = (segment: TransitPathSegment) => {
+        return journey.segments.indexOf(segment);
     };
 
-    const isFirstSegment = (segment: TransitSegment) => {
-        return routeInfo.routeSegments.indexOf(segment) === 0;
+    const isFirstSegment = (segment: TransitPathSegment) => {
+        return journey.segments.indexOf(segment) === 0;
     };
 
-    const isLastSegment = (segment: TransitSegment) => {
+    const isLastSegment = (segment: TransitPathSegment) => {
         return (
-            routeInfo.routeSegments.indexOf(segment) ===
-            routeInfo.routeSegments.length - 1
+            journey.segments.indexOf(segment) === journey.segments.length - 1
         );
     };
-    function formatDistance(distanceInMeters: number): string {
-        // Conversion factors
-        const metersInKilometer = 1000;
-        const metersInMile = 1609.34;
 
+    // Conversion factors
+    const metersInKilometer = 1000;
+    const metersInMile = 1609.34;
+
+    function formatDistance(distanceInMeters: number): string {
         // Convert distance to miles and kilometers
         const distanceInKilometers = distanceInMeters / metersInKilometer;
         const distanceInMiles = distanceInMeters / metersInMile;
@@ -67,7 +41,7 @@
 
         return formattedDistance;
     }
-    const backdropRounded = (segment: TransitSegment) => {
+    const backdropRounded = (segment: TransitPathSegment) => {
         return isFirstSegment(segment)
             ? "rounded-l-3xl"
             : isLastSegment(segment)
@@ -75,8 +49,8 @@
               : "";
     };
 
-    const significanceValues = routeInfo.routeSegments.map(
-        (segment) => segment.duration,
+    const significanceValues = journey.segments.map(
+        (segment) => segment.estimatedTime,
     );
 
     const sortedSignificanceValues = [...significanceValues];
@@ -112,20 +86,19 @@
         class="grid h-16 gap-0 rounded-3xl bg-white"
         style={totalGridColsStyle}
     >
-        {#each routeInfo.routeSegments as segment}
+        {#each journey.segments as segment}
+            <!-- the background color is needed for single segment routes
+            because it is used to connect between segment cards -->
             <div
                 class={backdropRounded(segment)}
-                style="background-color: {segmentShade(
-                    segment,
-                    1,
-                )};{colSpanClasses[segmentIndex(segment)]}"
+                style="background-color: {journey.segments.length === 1 ? 'transparent': segmentShade(segment,1)};{colSpanClasses[segmentIndex(segment)]}"
             >
                 <div
                     class="rounded-3xl {isFirstSegment(segment) ||
                         'rounded-l-none'} flex h-full flex-col items-center justify-center p-3"
                     style="background-color: {segmentShade(segment)};"
                 >
-                    {#if segment.type === "walk"}
+                    {#if segment.isWalking}
                         <div>
                             <div class="flex">
                                 <img src="/walking.svg" alt="walk-img" />
@@ -134,18 +107,18 @@
                                 </div>
                             </div>
                             <div class="text-xs font-light text-gray-700">
-                                {segment.duration} mins
+                                {segment.estimatedTime} mins
                             </div>
                         </div>
                     {:else}
                         <div class="flex">
                             <img src="/bus.svg" alt="bus-img" />
                             <div class="Poppins ps-2 text-base">
-                                {segment.from.busLineId}
+                                {segment.busLine?.metadata.route_id.split('-')[0]}
                             </div>
                         </div>
                         <div class="Poppins text-xs font-light text-gray-700">
-                            {segment.duration} mins
+                            {segment.estimatedTime} mins
                         </div>
                     {/if}
                 </div>

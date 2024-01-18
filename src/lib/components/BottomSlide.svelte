@@ -1,4 +1,6 @@
 <script lang="ts">
+    import Scrollable from "$lib/components/BottomSlideScrollable.svelte";
+    import Title from "$lib/components/BottomSlideTitle.svelte";
     export let size: number = 1;
 
     let height = "h-3/6";
@@ -9,7 +11,7 @@
 
 <div
     aria-label="Bottom Slide"
-    class="bg-glass bg-glas absolute bottom-0 {height} w-screen rounded-t-3xl px-6"
+    class="bg-glass bg-glass absolute bottom-0 {height} w-screen rounded-t-3xl px-6"
     id="results"
 >
     <div class="mt-3.5 w-full">
@@ -19,5 +21,5 @@
             alt="round-drag-handle"
         />
     </div>
-    <slot />
+    <slot {Title} {Scrollable} />
 </div>

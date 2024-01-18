@@ -1,7 +1,8 @@
-import { BUSLINES } from "$lib/db";
+import { getAllBusLines, getAllBusStops } from "$lib/server/database";
 
 export const load = () => {
     return {
-        busLines: Object.values(BUSLINES),
+        busLines: Object.values(getAllBusLines()),
+        busStops: getAllBusStops()
     };
 };

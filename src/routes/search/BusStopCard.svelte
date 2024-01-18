@@ -1,15 +1,15 @@
 <script lang="ts">
-    import type { BusStop } from "$lib/db";
+    import type { BusStop } from "$lib/database.d";
 
     export let busStop: BusStop;
     export let onClick: () => void;
 </script>
 
-<button on:click={onClick} class="text-left my-2">
+<button on:click={onClick} class="my-2 text-left">
     <div class="flex">
         <img src="/location.svg" alt="location" class="w-3" />
-        <div class="py-1 ps-2 my-lang">{busStop.name}</div>
+        <div class="my-lang py-1 ps-2">{busStop.name_en}</div>
     </div>
-    <div class="font-light text-xs my-lang">{busStop.address}</div>
+    <div class="my-lang text-xs font-light">{busStop.road_en}</div>
 </button>
 <br />

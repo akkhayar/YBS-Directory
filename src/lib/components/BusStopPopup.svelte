@@ -1,19 +1,19 @@
 <script lang="ts">
-    import { BUSSTOPS, BUSLINES } from "$lib/db";
+    import { BUSSTOPS, BUSLINES } from "$lib/database";
     export let busStopName: string | undefined;
 
-    const busStopData = Object.values(BUSSTOPS.busStops).find(
-        (busStop) => busStop.name === busStopName,
+    const busStopData = Object.values(BUSSTOPS).find(
+        (busStop) => busStop.name_en === busStopName,
     );
 
     const busLineData = Object.values(BUSLINES).filter((busLine) =>
-        busLine.stops.includes(busStopData!.name),
+        Object.values(busLine.stops).includes(busStopData!.name_en),
     );
 </script>
 
-<div class="w-10 h-10 bg-white z-10">
+<div class="z-10 h-10 w-10 bg-white">
     {#each busLineData as busLine}
-        <div class="flex flex-row justify-center items-center">
+        <div class="flex flex-row items-center justify-center">
             {busLine}
         </div>
     {/each}

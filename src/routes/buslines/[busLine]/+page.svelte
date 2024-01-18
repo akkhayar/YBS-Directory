@@ -2,43 +2,50 @@
     import type { PageData } from "./$types";
     import { route } from "$lib/stores/route";
     import BottomSlide from "$lib/components/BottomSlide.svelte";
-    import BottomSlideScrollable from "$lib/components/BottomSlideScrollable.svelte";
-    import BottomSlideTitle from "$lib/components/BottomSlideTitle.svelte";
+    import BackButton from "$lib/components/BackButton.svelte";
 
     export let data: PageData;
-    const routeArray = data.routedBusStops.map((busStops) => [
-        busStops.latitude,
-        busStops.longitude,
-    ]);
 
-    route.set(routeArray);
+    if (data.routedBusStops) {
+        const routeArray = data.routedBusStops.map((busStop) => [
+            busStop.lat,
+            busStop.lng,
+        ]);
+
+        route.set(routeArray);
+    }
 </script>
 
-<div class="absolute bottom-0 h-2/5 flex">
-    <BottomSlide>
-        <BottomSlideTitle>
+{#if data.busLine}
+    <BackButton />
+    <BottomSlide let:Scrollable let:Title>
+        <Title>
             Stops between: <span class="NotoSansMyanmar"
-                >{data.routedBusStops[0].name} - {data.routedBusStops[
+                >{data.routedBusStops[0].name_mm} - {data.routedBusStops[
                     data.routedBusStops.length - 1
-                ].name}</span
+                ].name_mm}</span
             >
-        </BottomSlideTitle>
-        <h1>Bus Line: {data.busLine.busLineId}</h1>
-        <BottomSlideScrollable>
+            </Title>
+        <Scrollable>
             <div class="flex">
-                <div class="grid grid-cols-2 place-items-center gap-1">
-                    <div class="grid grid-cols-3 place-items-center gap-1">
-                        <div class="font-bold">Buses</div>
-                        <div />
-                        <div class="font-bold">Bus Stop</div>
-                        {#each data.routedBusStops as routedStop}
-                            <div>BUSES</div>
-                            <div> - </div>
-                            <div>{routedStop.name}</div>
-                        {/each}
+                <div class="grid grid-cols-4 place-items-center gap-1">
+                    <div />
+                    <div class="Poppins col-span-3 font-bold text-white">
+                        Stops
                     </div>
+                    {#each data.routedBusStops as routedStop}
+                        <div
+                            class="h-2 w-2 rounded-full border border-solid border-black bg-white"
+                        ></div>
+                        <div class="col-span-3 text-white">
+                            {routedStop.name_mm}
+                        </div>
+                    {/each}
                 </div>
             </div>
-        </BottomSlideScrollable>
+        </Scrollable>
     </BottomSlide>
-</div>
+{:else}
+    <!-- TODO -->
+    <h1>Busline not found.</h1>
+{/if}

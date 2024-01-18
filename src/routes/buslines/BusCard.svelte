@@ -1,15 +1,25 @@
 <script lang="ts">
-    import type { BusLine } from "$lib/db";
+    export let busLineId: string;
+    export let busLineFirstStopName: string;
+    export let busLineLastStopName: string;
+    export let nBusLineStops: number;
+    export let cardColor: string;
 
-    export let busLine: BusLine;
+    const colorClassMap = {
+        red: "bg-busRed-100",
+        blue: "bg-busBlue-100",
+        purple: "bg-busPurple-100",
+        brown: "bg-busBrown-100",
+        cyan: "bg-busCyan-100",
+    };
 </script>
 
-<a class="flex justify-start mb-7" href="/buslines/{busLine.busLineId}">
+<a class="flex justify-start mb-7" href="/buslines/{busLineId}">
     <div
-        class="bg-bus-blue w-14 h-14 me-5 flex rounded-lg items-center justify-center"
+        class="{colorClassMap[cardColor]} w-14 h-14 me-5 flex rounded-lg items-center justify-center"
     >
         <span class="text-2xl text-white Arial">
-            {busLine.busLineId}
+            {busLineId}
         </span>
     </div>
     <div class="flex flex-col justify-center">
@@ -18,7 +28,7 @@
             style="font-family: 'Noto Sans Myanmar', serif;"
         >
             <span>
-                {busLine.firstStopId}
+                {busLineFirstStopName}
             </span>
             <img
                 src="/bi-directional-arrow.svg"
@@ -26,13 +36,13 @@
                 class="w-4 mx-3"
             />
             <span>
-                {busLine.lastStopId}
+                {busLineLastStopName}
             </span>
         </div>
         <div
             class="my-lang text-white text-xs text-dim"
         >
-            {busLine.stops.length} total stops
+            {nBusLineStops} total stops
         </div>
     </div>
 </a>
