@@ -1,24 +1,18 @@
 import busStopsJSON from "$lib/data/busStops.json";
 import busLinesMetadata from "$lib/data/routes/metadata.json";
-import fs from "fs";
 import type { BusLineGeoJSON, BusStop, Transit } from "$lib/database.d";
+import { toJsonSerializable } from "$lib/utils";
 
 const BUSSTOPS: { [busStopID: string]: BusStop } = busStopsJSON;
 const busStopValues = Object.values(BUSSTOPS);
 const busLines: { [busLine: string]: BusLineGeoJSON } = {};
 
 for (const busLine of busLinesMetadata.busLines) {
-    const geojson = fs.readFileSync(
-        `src/lib/data/routes/${busLine}.geojson`,
-        "utf8",
-    );
+    const data = await import(
+        	`$lib/data/routes/${busLine}.json`,
+    ) as BusLineGeoJSON;
 
-    try {
-        const data = JSON.parse(geojson) as BusLineGeoJSON;
-        busLines[data.metadata.route_id] = data;
-    } catch (e) {
-        console.error(`Error parsing ${busLine}.geojson`);
-    }
+    busLines[data.metadata.route_id] = toJsonSerializable(data) as BusLineGeoJSON;
 }
 
 export function stringIntSmaller(str1: string, str2: string) {
