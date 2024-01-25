@@ -7,7 +7,7 @@
 </script>
 
 <div
-    class="mb-3 flex h-10 flex-grow justify-between rounded-full border border-solid bg-white px-3 py-1 shadow sm:w-80 sm:flex-none placeholder:text-muted-foreground border-primary-100"
+    class="custom-shadow flex h-10 flex-grow justify-between rounded-full border border-solid border-primary-100 bg-white px-5 align-middle text-gray-400 sm:w-80 sm:flex-none"
 >
     <!-- TODO: add focus-visible class to this input -->
     <input
