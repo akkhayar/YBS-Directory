@@ -1,5 +1,5 @@
 <script lang="ts">
-    import "../app.postcss";
+    import "../../app.postcss";
     import { onMount } from "svelte";
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -26,7 +26,7 @@
     onMount(async () => {
         await detectSWUpdate();
         // dynamically import the CSR component and lib
-        LeafletMap = (await import("$lib/components/LeafletMap.svelte")).default;
+        LeafletMap = (await import("$lib/components/ui/LeafletMap.svelte")).default;
     });
 </script>
 

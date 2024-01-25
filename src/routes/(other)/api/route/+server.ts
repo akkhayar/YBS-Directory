@@ -4,10 +4,9 @@ import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 
 export const GET: RequestHandler = async ({ url }) => {
-
     error(400, "not yet supported");
     return;
-    // FEFATURE FLAG - DISABLED
+    // FEATURE DISABLED
     const from = url.searchParams.get("from");
     const to = url.searchParams.get("to");
 

@@ -1,21 +1,24 @@
 <script lang="ts">
-    import BottomDrawer from "$lib/components/ui/bottom-drawer/BottomDrawer.svelte";
-    import BackButton from "$lib/components/BackButton.svelte";
-    import BusCard from "./BusCard.svelte";
     import type { PageData } from "./$types";
     import type { BusLineGeoJSON } from "$lib/database.d";
-    import LazyListView from "$lib/components/LazyListView.svelte";
     import { createSearchStore } from "$lib/stores/search";
-    import { slide } from "svelte/transition";
+    import { fade, slide } from "svelte/transition";
+    import BottomDrawer from "$lib/components/ui/bottom-drawer/BottomDrawer.svelte";
+    import LazyListView from "$lib/components/ui/LazyListView.svelte";
+    import HideSearchBar from "$lib/components/ui/HideSearchBar.svelte";
+    import BackButton from "$lib/components/ui/BackButton.svelte";
+    import BusCard from "./BusCard.svelte";
 
     export let data: PageData;
 
     let searchStore = createSearchStore<BusLineGeoJSON>(
         data.busLines,
         (busLine) => busLine.metadata.route_id,
+        "metadata.route_id",
     );
-    
+
     const search = $searchStore.search;
+
     function getBusStopNameIndex(bus: BusLineGeoJSON, index: number) {
         if (bus.metadata.stops.length === 0) return "";
         return data.busStops[
@@ -27,14 +30,15 @@
 </script>
 
 <BackButton />
-
+<HideSearchBar />
 <BottomDrawer let:Scrollable let:Header>
     <Header>
         <div
-            in:slide={{duration: 250, axis: 'y', delay: 250 }}
+            in:slide={{ duration: 250, axis: "y", delay: 250 }}
             class="flex justify-start border-b-2 border-solid border-white bg-transparent px-3 pb-2"
         >
             <img
+                in:fade={{ duration: 250, delay: 200 }}
                 class="my-auto me-3 h-5 w-5"
                 src="/assets/images/search-icon.svg"
                 alt="search-icon"
@@ -49,12 +53,16 @@
         </div>
     </Header>
     <Scrollable>
-        <LazyListView items={$searchStore.filtered} let:data={bus}>
+        <LazyListView
+            items={$searchStore.filtered}
+            initialBuffer={6}
+            let:data={bus}
+        >
             <BusCard
                 busLineId={bus.metadata.route_id}
                 busLineFirstStopName={getBusStopNameIndex(bus, 0)}
                 busLineLastStopName={getBusStopNameIndex(bus, -1)}
-                nBusLineStops={bus.metadata.stops.length}
+                totalStops={bus.metadata.stops.length}
                 cardColor={bus.metadata.color}
             />
         </LazyListView>
