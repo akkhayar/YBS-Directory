@@ -1,6 +1,6 @@
 <div class="search-bar flex flex-row shrink-0 rounded-full border-1 w-64 h-11">
     <div class="order-last">
-        <img src="search-icon.svg" alt="search-icon" />
+        <img src="/assets/images/search-icon.svg" alt="search-icon" />
     </div>
     <div>
         <!-- to D/L -->

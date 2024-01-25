@@ -1,21 +1,26 @@
 <div
     aria-label="Navigation Bar"
-    class="px-6 py-5 pb-1 absolute top-0 flex w-full sm:w-fit"
+    class="absolute top-0 flex w-full px-6 py-5 pb-1 sm:w-fit"
 >
     <a
         aria-label="More Options"
         href="/settings"
-        class="w-10 h-10 me-6 rounded-3xl border flex bg-white border-solid shadow border-primary-100"
+        class="me-6 flex h-10 w-10 rounded-3xl border border-solid border-primary-100 bg-white shadow"
     >
-        <img class="w-5 mx-auto" src="hamburger.svg" alt="search-icon" />
+        <img class="mx-auto w-5" src="/assets/images/hamburger.svg" alt="search-icon" />
     </a>
 
     <a
         aria-label="Search Bar"
-        class="h-10 flex-grow sm:flex-none sm:w-80 px-5 bg-white rounded-full border border-solid flex justify-between shadow border-primary-100"
+        class="flex h-10 flex-grow justify-between rounded-full border border-solid border-primary-100 bg-white px-5 shadow sm:w-80 sm:flex-none text-gray-400 align-middle"
         href="/search"
-    >   
-        <img class="ms-auto w-5" src="search-icon.svg" alt="search-icon" />
+    >
+        <span class="Poppins font-light" style="line-height: 2.4;">Search bus stop..</span>
+        <img
+            class="filter-primary-100 ms-auto w-5"
+            src="/assets/images/search-icon.svg"
+            alt="search-icon"
+        />
     </a>
 </div>
 
