@@ -6,6 +6,7 @@
     import type { BusLineGeoJSON } from "$lib/database.d";
     import LazyListView from "$lib/components/LazyListView.svelte";
     import { createSearchStore } from "$lib/stores/search";
+    import { slide } from "svelte/transition";
 
     export let data: PageData;
 
@@ -13,7 +14,8 @@
         data.busLines,
         (busLine) => busLine.metadata.route_id,
     );
-
+    
+    const search = $searchStore.search;
     function getBusStopNameIndex(bus: BusLineGeoJSON, index: number) {
         if (bus.metadata.stops.length === 0) return "";
         return data.busStops[
@@ -29,6 +31,7 @@
 <BottomDrawer let:Scrollable let:Header>
     <Header>
         <div
+            in:slide={{duration: 250, axis: 'y', delay: 250 }}
             class="flex justify-start border-b-2 border-solid border-white bg-transparent px-3 pb-2"
         >
             <img
@@ -40,13 +43,13 @@
             <input
                 class="Poppins w-full bg-transparent text-xs text-white placeholder:text-white focus-visible:outline-none"
                 type="search"
-                bind:value={$searchStore.search}
+                bind:value={$search}
                 placeholder="Search Bus Lines"
             />
         </div>
     </Header>
     <Scrollable>
-        <LazyListView items={data.busLines} let:data={bus}>
+        <LazyListView items={$searchStore.filtered} let:data={bus}>
             <BusCard
                 busLineId={bus.metadata.route_id}
                 busLineFirstStopName={getBusStopNameIndex(bus, 0)}
