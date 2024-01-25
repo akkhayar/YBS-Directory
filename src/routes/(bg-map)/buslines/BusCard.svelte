@@ -6,6 +6,14 @@
     export let busLineLastStopName: string;
     export let totalStops: number;
     export let cardColor: string;
+
+    // For tailwind
+    "bg-busBlue-100";
+    "bg-busRed-100" ;
+    "bg-busPurple-100";
+    "bg-busCyan-100";
+    "bg-busBrown-100";
+    "bg-busGray-100";
 </script>
 
 <a class="flex justify-start pb-7" href="/buslines/{busLineId}">

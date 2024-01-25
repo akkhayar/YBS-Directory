@@ -18,6 +18,14 @@
     onDestroy(() => {
         geoJSON.set(undefined);
     });
+
+    // For tailwind
+    "bg-busBlue-100";
+    "bg-busRed-100" ;
+    "bg-busPurple-100";
+    "bg-busCyan-100";
+    "bg-busBrown-100";
+    "bg-busGray-100";
 </script>
 
 {#if data.busLine}
