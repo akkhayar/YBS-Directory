@@ -3,11 +3,11 @@
     export let busStopName: string | undefined;
 
     const busStopData = Object.values(BUSSTOPS).find(
-        (busStop) => busStop.name_en === busStopName,
+        (busStop) => busStop.name_mm === busStopName,
     );
 
     const busLineData = Object.values(BUSLINES).filter((busLine) =>
-        Object.values(busLine.stops).includes(busStopData!.name_en),
+        Object.values(busLine.stops).includes(busStopData!.name_mm),
     );
 </script>
 

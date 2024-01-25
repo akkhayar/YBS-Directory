@@ -57,7 +57,7 @@
         //     L.layerGroup(
         //         busStops.map((busStop) => {
         //             const marker = L.marker([busStop.lat, busStop.lng], {
-        //                 title: busStop.name_en,
+        //                 title: busStop.name_mm,
         //                 icon: L.icon({
         //                     iconUrl: "/bus-stop.svg",
         //                     iconSize: [16, 16],

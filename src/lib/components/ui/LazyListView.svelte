@@ -1,9 +1,10 @@
 <script lang="ts">
-    import { FixedSizeArray } from "$lib/fixedArray";
+    import { FixedSizeArray } from "$lib/utils";
     import { onDestroy, onMount } from "svelte";
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     export let items: any[];
-    export let initialBuffer = 6;
+    export let initialBuffer: number;
 
     let observer: IntersectionObserver;
     let endItems = new FixedSizeArray(3);
@@ -17,9 +18,11 @@
         observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
-                    if (entry.isIntersecting && endItems.includes(entry.target)) {
+                    if (entry.isIntersecting && (!endItems.isFull() || endItems.includes(entry.target))) {
                         visibleItems = [
+                            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                             ...visibleItems,
+                            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                             ...items.slice(
                                 visibleItems.length,
                                 visibleItems.length + 3,
@@ -34,7 +37,7 @@
             },
         );
 
-        const elements = document.querySelectorAll(".bscw");
+        const elements = document.querySelectorAll(".lazy-item");
         elements.forEach((el) => observer.observe(el));
     });
 
@@ -49,6 +52,7 @@
                 if (observer) {
                     observer.unobserve(node);
                 }
+                endItems.remove(node);
             },
         };
     }
@@ -61,7 +65,7 @@
 </script>
 
 {#each visibleItems as item}
-    <div class="bscw" use:observe>
+    <div class="lazy-item" use:observe>
         <slot data={item} />
     </div>
 {/each}
