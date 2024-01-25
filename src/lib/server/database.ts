@@ -2,12 +2,9 @@ import busStopsJSON from "$lib/data/busStops.json";
 import busLinesMetadata from "$lib/data/routes/metadata.json";
 import fs from "fs";
 import type { BusLineGeoJSON, BusStop, Transit } from "$lib/database.d";
-import { keyOf, getTransitDistance } from "$lib/server/preprocessor";
 
 const BUSSTOPS: { [busStopID: string]: BusStop } = busStopsJSON;
-
 const busStopValues = Object.values(BUSSTOPS);
-
 const busLines: { [busLine: string]: BusLineGeoJSON } = {};
 
 for (const busLine of busLinesMetadata.busLines) {
@@ -24,11 +21,33 @@ for (const busLine of busLinesMetadata.busLines) {
     }
 }
 
+export function stringIntSmaller(str1: string, str2: string) {
+    return parseInt(str1) < parseInt(str2);
+}
+
+export function keyOf(stopAId: string, stopBId: string) {
+    return stringIntSmaller(stopAId, stopBId)
+        ? `${stopAId}-${stopBId}`
+        : `${stopBId}-${stopAId}`;
+}
+
+export async function getTransitDistance(stopAId: string, stopBId: string) {
+    const stopA = getBusStop({ busStopId: stopAId });
+    const stopB = getBusStop({ busStopId: stopBId });
+    console.log(`Finding distance between ${stopAId} -> ${stopBId}`);
+    const request = await fetch(
+        `https://router.project-osrm.org/route/v1/driving/${stopA.lng},${stopA.lat};${stopB.lng},${stopB.lat}?overview=false`,
+    );
+    const response = await request.json();
+
+    return response.routes[0].distance as number;
+}
+
 // const transitNetworkCSV = fs.readFileSync(
 //     `src/lib/data/transitNetwork.csv`,
 //     "utf8",
 // );
-const transitNetworkCSV = '';
+const transitNetworkCSV = "";
 
 export const transitNetwork: { [id: string]: Transit } = {};
 let headers: string[];
@@ -93,7 +112,12 @@ export async function referenceTransitDistance(
     const index = keyOf(stopAId, stopBId) + busLineId;
     if (!Object.keys(transitNetwork).includes(index)) {
         const distance = await getTransitDistance(stopAId, stopBId);
-        transitNetwork[index] = {a: stopAId, b: stopBId, distance, busLineId: busLineId};
+        transitNetwork[index] = {
+            a: stopAId,
+            b: stopBId,
+            distance,
+            busLineId: busLineId,
+        };
         // throw Error(`Bus stops ${stopAId} and ${stopBId} do not have a distance value.`);
     }
     return transitNetwork[index].distance;
@@ -132,7 +156,7 @@ export function getBusStop(query: {
         busStop = BUSSTOPS[query.busStopId];
     } else if (query.busStopName) {
         busStop = busStopValues.find(
-            (stop) => stop.name_en === query.busStopName,
+            (stop) => stop.name_mm === query.busStopName,
         );
     } else if (query.coordinates) {
         busStop = busStopValues.find(
