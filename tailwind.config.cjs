@@ -26,6 +26,9 @@ const config = {
                 busBrown: {
                     100: "#a6703b",
                 },
+                busGray: {
+                    100: "#808080",
+                },
             },
             textColor: {
                 dark: "#343434",
