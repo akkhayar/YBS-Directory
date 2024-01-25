@@ -24,10 +24,11 @@ for (const busLine of busLinesMetadata.busLines) {
     }
 }
 
-const transitNetworkCSV = fs.readFileSync(
-    `src/lib/data/transitNetwork.csv`,
-    "utf8",
-);
+// const transitNetworkCSV = fs.readFileSync(
+//     `src/lib/data/transitNetwork.csv`,
+//     "utf8",
+// );
+const transitNetworkCSV = '';
 
 export const transitNetwork: { [id: string]: Transit } = {};
 let headers: string[];
