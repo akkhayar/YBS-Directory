@@ -1,7 +1,6 @@
 <script lang="ts">
     import "../app.postcss";
     import { onMount } from "svelte";
-    import { route } from "$lib/stores/route";
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let LeafletMap: any;
@@ -34,7 +33,6 @@
 {#if LeafletMap}
     <svelte:component
         this={LeafletMap}
-        latLngRouteArray={$route}
     />
 {/if}
 
