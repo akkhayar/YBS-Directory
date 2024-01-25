@@ -7,7 +7,8 @@
 
     let observer: IntersectionObserver;
     let endItems = new FixedSizeArray(3);
-    let visibleItems = items.slice(
+    
+    $: visibleItems = items.slice(
         0,
         items.length < initialBuffer ? items.length : initialBuffer,
     );
