@@ -1,12 +1,9 @@
 <script lang="ts">
-    import type { BusStop } from "$lib/database.d";
     import type { Writable } from "svelte/store";
 
     export let onInputClick: () => void;
     export let placeholder: string;
-    export let valueStore: Writable<BusStop | undefined>;
-    
-    $: valueText = ($valueStore && $valueStore.name_en) || '';
+    export let valueStore: Writable<string>;
 </script>
 
 <div
@@ -17,7 +14,7 @@
         class="focus-visible:outline-none"
         type="search"
         placeholder="{placeholder}..."
-        bind:value={valueText}
+        bind:value={$valueStore}
         on:click={onInputClick}
     />
 

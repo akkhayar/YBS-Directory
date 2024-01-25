@@ -101,7 +101,7 @@
                     {#if segment.isWalking}
                         <div>
                             <div class="flex">
-                                <img src="/walking.svg" alt="walk-img" />
+                                <img src="/assets/images/walking.svg" alt="walk-img" />
                                 <div class="ps-2 text-xs">
                                     {formatDistance(segment.distance)}
                                 </div>
@@ -112,7 +112,7 @@
                         </div>
                     {:else}
                         <div class="flex">
-                            <img src="/bus.svg" alt="bus-img" />
+                            <img src="/assets/images/bus.svg" alt="bus-img" />
                             <div class="Poppins ps-2 text-base">
                                 {segment.busLine?.metadata.route_id.split('-')[0]}
                             </div>
@@ -134,7 +134,7 @@
         </div>
 
         <a href="/route">
-            <img src="/right-arrow.svg" alt="right-arrow" />
+            <img src="/assets/images/right-arrow.svg" alt="right-arrow" />
         </a>
     </div>
 </div>
