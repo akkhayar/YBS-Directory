@@ -7,8 +7,8 @@ export function title(text: string) {
 export function translate(text: string) {
     const numMap = ["၀", "၁", "၂", "၃", "၄", "၅", "၆", "၇", "၈", "၉"];
     return Array.from(text.toString())
-        .map((char) => numMap[parseInt(char)] || '')
-        .join('');
+        .map((char) => numMap[parseInt(char)] || "")
+        .join("");
 }
 
 export class FixedSizeArray<T> {
@@ -47,3 +47,30 @@ export class FixedSizeArray<T> {
         return this.data.includes(element);
     }
 }
+
+export function toJsonSerializable(obj) {
+    // Check if the value is an object or array, and not null
+    if (obj === null || typeof obj !== 'object') {
+      return obj;
+    }
+  
+    // Handle arrays
+    if (Array.isArray(obj)) {
+      return obj.map(item => toJsonSerializable(item));
+    }
+  
+    // Handle objects
+    const result = {};
+    for (const key of Reflect.ownKeys(obj)) {
+      // Skip unwanted keys
+      if (key === 'default' || key === '__esModule' || typeof key === 'symbol') {
+        continue;
+      }
+  
+      const value = obj[key];
+      result[key] = toJsonSerializable(value);
+    }
+  
+    return result;
+  }
+  
