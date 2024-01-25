@@ -39,7 +39,7 @@
         // Ensure the latitude stays within the valid range of -90 to 90
         return L.latLngBounds(southWest, northEast);
     }
-
+  
     onMount(() => {
         map = L.map(mapElement, {
             maxBounds: yangon,
