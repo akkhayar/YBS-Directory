@@ -1,16 +1,24 @@
 import { writable } from "svelte/store";
-import type { BusStop } from "$lib/database.d";
 
-type SearchStore = {
-    data: BusStop[];
-    filtered: BusStop[];
+type SearchStore<T> = {
+    data: T[];
+    filtered: T[];
     search: string;
 };
 
-export function createSearchStore(data: BusStop[]) {
+export function createSearchStore<T>(data: T[], index: (val: T) => string) {
+    // filter bus stop objects based on name
+    const uniqueData = Object.values(data.reduce(
+        (prev, cur) => {
+            prev[index(cur)] = cur;
+            return prev;
+        },
+        {} as { [key: string]: T },
+    ));
+
     const { subscribe, set, update } = writable({
-        data,
-        filtered: data,
+        data: uniqueData,
+        filtered: uniqueData,
         search: "",
     });
 
@@ -21,9 +29,9 @@ export function createSearchStore(data: BusStop[]) {
     };
 }
 
-export function searchHandler(store: SearchStore) {
+export function searchHandler<T>(store: SearchStore<T>, searchable: (val: T) => string) {
     const searchTerm = store.search.toLowerCase();
     store.filtered = store.data.filter((item) => {
-        return item.name_en.toLowerCase().includes(searchTerm);
+        return searchable(item).includes(searchTerm);
     });
 }
