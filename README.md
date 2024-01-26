@@ -7,11 +7,11 @@
   </p>
 </p>
 
-#### Built With [Sveltekit](https://kit.svelte.dev/)
+#### 🧡 Built With [Sveltekit](https://kit.svelte.dev/)
 
 ## Contributing
 
-ဤပရောဂျက်ကိုစတင်ရန် dependencies တွေကို install လုပ်ပါ၊ ပြီးရင် database setup လုပ်ပြီးစလို့ရပ်ပြီ။
+ဤပရောဂျက်ကို run ရန် dependencies များကို install လုပ်ပါ၊ ပြီးရင် database setup လုပ်ပြီးစလို့ရပါပြီ။
 
 ```
 npm install
@@ -37,15 +37,13 @@ node ./scripts/setupDatabase.js
 
 ### Resources
 
--   Database design and API spec: [YBS Directory Design](https://docs.google.com/spreadsheets/d/1Q6ZpYY1SJoLgS7RcC3Hd43BCBkl-3pBzAlSL2KB9GMc/edit#gid=0)
--   [Eraser.io Technology diagramming](https://app.eraser.io/workspace/DCg4rler38qxR7gOFpw1)
 -   UI Figma: [YBS Directory UI](https://www.figma.com/file/GZYvYrX6ifqphqYLqmtRpR/YBS?type=design&node-id=0%3A1&mode=design&t=pHOs2oRURsbC7FbE-1)
 
 ## Licenses
 
-1. [ဤပရောဂျက်၏လိုင်စဥ်](./LICENSE)။
+၁. [ဤပရောဂျက်၏လိုင်စဥ်။](./LICENSE)
 
-2. [Geo နှင် မှတ်တိုင်များဆိုင်ရာ OSM မှဒေတာများ၏လိုင်စဉ်](https://opendatacommons.org/licenses/odbl/1-0/)။
+၂. [လိုင်းကား နှင် မှတ်တိုင် ဒေတာ၏လိုင်စဥ်။](https://github.com/thantthet/YBS-Data/blob/master/LICENSE.md)
 
 ## Credits
 
