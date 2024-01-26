@@ -11,7 +11,7 @@
 >
     <div class="flex">
         <img src="/assets/images/location.svg" alt="location" class="w-3" />
-        <div class="ps-2 my-lang text-xs ">
+        <div class="ps-2 my-lang text-xs font-sans">
             <div class="font-bold">{busStop.name_mm}</div>
             <div class="font-light">{busStop.road_mm}</div>
         </div>
