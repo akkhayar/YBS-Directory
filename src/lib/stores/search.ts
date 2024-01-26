@@ -1,37 +1,48 @@
 import { writable } from "svelte/store";
+import fuzzysort from "fuzzysort";
 
-type SearchStore<T> = {
-    data: T[];
-    filtered: T[];
-    search: string;
-};
-
-export function createSearchStore<T>(data: T[], index: (val: T) => string) {
+/**
+ * Creates a search store with a complex object array. 
+ * 
+ * Returns an object with the data passed in, the filtered list and the
+ * search writable.
+ * 
+ * @param data 
+ * @param index 
+ * @param searchKey 
+ * @returns 
+ */
+export function createSearchStore<T>(data: T[], index: (val: T) => string, searchKey: string) {
     // filter bus stop objects based on name
-    const uniqueData = Object.values(data.reduce(
-        (prev, cur) => {
-            prev[index(cur)] = cur;
-            return prev;
-        },
-        {} as { [key: string]: T },
-    ));
+    const uniqueData = Object.values(
+        data.reduce(
+            (prev, cur) => {
+                prev[index(cur)] = cur;
+                return prev;
+            },
+            {} as { [key: string]: T },
+        ),
+    );
 
-    const { subscribe, set, update } = writable({
+    const search = writable("");
+
+    const store = writable({
         data: uniqueData,
         filtered: uniqueData,
-        search: "",
+        search,
     });
 
-    return {
-        subscribe,
-        set,
-        update,
-    };
-}
-
-export function searchHandler<T>(store: SearchStore<T>, searchable: (val: T) => string) {
-    const searchTerm = store.search.toLowerCase();
-    store.filtered = store.data.filter((item) => {
-        return searchable(item).includes(searchTerm);
+    search.subscribe((searchString) => {
+        store.update((model) => {
+            if (searchString.trimEnd().length === 0) {
+                model.filtered = model.data;
+            } else {
+                model.filtered = fuzzysort
+                    .go(searchString, model.data, { key: searchKey })
+                    .map((res) => res.obj);
+            }
+            return model;
+        });
     });
+    return store;
 }

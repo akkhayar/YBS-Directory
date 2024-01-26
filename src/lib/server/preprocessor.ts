@@ -1,18 +1,6 @@
 import type { BusLineGeoJSON, Transit } from "$lib/database.d";
-import { getBusStop, transitNetwork } from "$lib/server/database";
+import { keyOf, stringIntSmaller, getTransitDistance, transitNetwork } from "$lib/server/database";
 import * as fs from "fs";
-
-export async function getTransitDistance(stopAId: string, stopBId: string) {
-    const stopA = getBusStop({ busStopId: stopAId });
-    const stopB = getBusStop({ busStopId: stopBId });
-    console.log(`Finding distance between ${stopAId} -> ${stopBId}`);
-    const request = await fetch(
-        `https://router.project-osrm.org/route/v1/driving/${stopA.lng},${stopA.lat};${stopB.lng},${stopB.lat}?overview=false`,
-    );
-    const response = await request.json();
-
-    return response.routes[0].distance as number;
-}
 
 function arrayToCSV(data: object[]): string {
     if (data.length === 0) return "";
@@ -29,16 +17,6 @@ function arrayToCSV(data: object[]): string {
     return [headers.join(","), ...rows].join("\n");
 }
 
-function stringIntSmaller(str1: string, str2: string) {
-    return parseInt(str1) < parseInt(str2);
-}
-
-export function keyOf(stopAId: string, stopBId: string) {
-    return stringIntSmaller(stopAId, stopBId)
-        ? `${stopAId}-${stopBId}`
-        : `${stopBId}-${stopAId}`;
-}
-
 export async function generateBusStopNetwork(busLines: BusLineGeoJSON[]) {
     const rows: Transit[] = Object.values(transitNetwork);
     const distanceCache: {[key: string]: number} = {};
@@ -47,7 +25,6 @@ export async function generateBusStopNetwork(busLines: BusLineGeoJSON[]) {
     for (const line of Object.values(busLines)) {
         for (const [index, stopId] of line.metadata.stops.entries()) {
             // Add the previous and next stops in the line as neighbors
-            console.log(`Processing ${stopId}`);
             const isExistent = (
                 stopAId: string,
                 stopBId: string,

@@ -6,7 +6,7 @@
 @tailwind utilities;
 
 .NotoSansMyanmar {
-    font-family: "Noto Sans Myanmar",serif;
+    font-family: "Noto Sans Myanmar", serif;
 }
 
 .Poppins {
@@ -18,17 +18,25 @@
     font-family: "Arial", serif;
 }
 
+.custom-shadow {
+    filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.25));
+}
 
 :root {
-    --color-secondary-white: #FFFDF0;
+    --color-secondary-white: #fffdf0;
 }
 
 body {
     background-color: #dddddd;
 }
 
+.filter-primary-100 {
+    filter: invert(81%) sepia(100%) saturate(844%) hue-rotate(325deg)
+        brightness(99%) contrast(104%);
+}
+
 .bg-glass {
-    background-color: rgba(20,38,34,40%); 
+    background-color: rgba(20, 38, 34, 40%);
     backdrop-filter: blur(15.6px);
 }
 
@@ -47,9 +55,9 @@ body {
 }
 
 .bg-bus-blue {
-    background-color: #3C2AA9
+    background-color: #3c2aa9;
 }
 
 .text-dim {
-    color: #DEDEDE;
+    color: #dedede;
 }
