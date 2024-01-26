@@ -59,7 +59,7 @@
                         </span>
                     </div>
                     <div class="my-lang text-dim text-xs text-white">
-                        {data.routedBusStops.length} total stops
+                        {translate(data.routedBusStops.length.toString())} မှတ်တိုင်များ
                     </div>
                 </div>
                 <div
@@ -82,7 +82,7 @@
                     initialBuffer={6}
                     let:data={routedStop}
                 >
-                    <div in:fade={{ duration: 250, delay: 300 }} class="event">
+                    <div in:fade={{ duration: 200, delay: 200 }} class="event">
                         <div class="event-icon"></div>
                         <div class="event-content my-lang">
                             {routedStop.name_mm}
@@ -135,5 +135,6 @@
         width: 2px; /* Line thickness */
         background-color: black; /* Line color */
         z-index: 0; /* Ensure the line is behind the icons */
+        margin-bottom: 37px;
     }
 </style>
